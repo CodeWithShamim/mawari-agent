@@ -1,8 +1,8 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import { useState, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import {
   Activity,
   Globe,
@@ -15,54 +15,54 @@ import {
   Clock,
   Shield,
   Router,
-  HardDrive
-} from 'lucide-react'
-import { discordService } from '@/lib/discord'
-import { twitterService } from '@/lib/twitter'
+  HardDrive,
+} from 'lucide-react';
+import { discordService } from '@/lib/discord';
+import { twitterService } from '@/lib/twitter';
 
 interface NetworkMetric {
-  label: string
-  value: string | number
-  change?: number
-  icon: React.ElementType
-  color: string
+  label: string;
+  value: string | number;
+  change?: number;
+  icon: React.ElementType;
+  color: string;
 }
 
 interface RealtimeMetric {
-  timestamp: number
-  bandwidth: number
-  latency: number
-  activeNodes: number
-  connectedUsers: number
+  timestamp: number;
+  bandwidth: number;
+  latency: number;
+  activeNodes: number;
+  connectedUsers: number;
 }
 
 export default function NetworkStats() {
-  const [selectedTimeframe, setSelectedTimeframe] = useState<'1h' | '24h' | '7d' | '30d'>('24h')
-  const [realtimeData, setRealtimeData] = useState<RealtimeMetric[]>([])
-  const [isLive, setIsLive] = useState(true)
-  const [announcements, setAnnouncements] = useState<any[]>([])
-  const [twitterStats, setTwitterStats] = useState<any>(null)
+  const [selectedTimeframe, setSelectedTimeframe] = useState<'1h' | '24h' | '7d' | '30d'>('24h');
+  const [realtimeData, setRealtimeData] = useState<RealtimeMetric[]>([]);
+  const [isLive, setIsLive] = useState(true);
+  const [announcements, setAnnouncements] = useState<any[]>([]);
+  const [twitterStats, setTwitterStats] = useState<any>(null);
 
   useEffect(() => {
     // Initialize services and load data
     const loadData = async () => {
       try {
-        await discordService.initialize()
-        await twitterService.initialize()
+        await discordService.initialize();
+        await twitterService.initialize();
 
-        setAnnouncements(discordService.getAnnouncements(5))
-        setTwitterStats(twitterService.getEngagementStats())
+        setAnnouncements(discordService.getAnnouncements(5));
+        setTwitterStats(twitterService.getEngagementStats());
       } catch (error) {
-        console.error('Error loading network stats:', error)
+        console.error('Error loading network stats:', error);
       }
-    }
+    };
 
-    loadData()
+    loadData();
 
     // Generate initial realtime data
     const generateInitialData = () => {
-      const data: RealtimeMetric[] = []
-      const now = Date.now()
+      const data: RealtimeMetric[] = [];
+      const now = Date.now();
 
       for (let i = 30; i >= 0; i--) {
         data.push({
@@ -70,22 +70,22 @@ export default function NetworkStats() {
           bandwidth: Math.random() * 100 + 50,
           latency: Math.random() * 5 + 5,
           activeNodes: Math.floor(Math.random() * 10) + 45,
-          connectedUsers: Math.floor(Math.random() * 1000) + 5000
-        })
+          connectedUsers: Math.floor(Math.random() * 1000) + 5000,
+        });
       }
 
-      setRealtimeData(data)
-    }
+      setRealtimeData(data);
+    };
 
-    generateInitialData()
+    generateInitialData();
 
     // Update realtime data
     const interval = setInterval(() => {
       if (isLive) {
-        setRealtimeData(prev => {
-          const newData = [...prev]
+        setRealtimeData((prev) => {
+          const newData = [...prev];
           if (newData.length > 30) {
-            newData.shift()
+            newData.shift();
           }
 
           newData.push({
@@ -93,16 +93,16 @@ export default function NetworkStats() {
             bandwidth: Math.random() * 100 + 50,
             latency: Math.random() * 5 + 5,
             activeNodes: Math.floor(Math.random() * 10) + 45,
-            connectedUsers: Math.floor(Math.random() * 1000) + 5000
-          })
+            connectedUsers: Math.floor(Math.random() * 1000) + 5000,
+          });
 
-          return newData
-        })
+          return newData;
+        });
       }
-    }, 5000) // Update every 5 seconds
+    }, 5000); // Update every 5 seconds
 
-    return () => clearInterval(interval)
-  }, [isLive])
+    return () => clearInterval(interval);
+  }, [isLive]);
 
   const networkMetrics: NetworkMetric[] = [
     {
@@ -110,66 +110,72 @@ export default function NetworkStats() {
       value: '99.9%',
       change: 0.1,
       icon: Shield,
-      color: 'text-green-400'
+      color: 'text-green-400',
     },
     {
       label: 'Active Nodes',
       value: realtimeData.length > 0 ? realtimeData[realtimeData.length - 1].activeNodes : 52,
       change: 2,
       icon: Server,
-      color: 'text-blue-400'
+      color: 'text-blue-400',
     },
     {
       label: 'Connected Users',
-      value: realtimeData.length > 0 ? realtimeData[realtimeData.length - 1].connectedUsers.toLocaleString() : '5,432',
+      value:
+        realtimeData.length > 0
+          ? realtimeData[realtimeData.length - 1].connectedUsers.toLocaleString()
+          : '5,432',
       change: 8.5,
       icon: Users,
-      color: 'text-purple-400'
+      color: 'text-purple-400',
     },
     {
       label: 'Average Latency',
-      value: realtimeData.length > 0 ? `${realtimeData[realtimeData.length - 1].latency.toFixed(1)}ms` : '7.2ms',
+      value:
+        realtimeData.length > 0
+          ? `${realtimeData[realtimeData.length - 1].latency.toFixed(1)}ms`
+          : '7.2ms',
       change: -0.8,
       icon: Clock,
-      color: 'text-yellow-400'
+      color: 'text-yellow-400',
     },
     {
       label: 'Bandwidth Saved',
       value: '80%',
       change: 5,
       icon: Download,
-      color: 'text-[#fb73ea]'
+      color: 'text-[#fb73ea]',
     },
     {
       label: 'Global Coverage',
       value: '47',
       change: 3,
       icon: Globe,
-      color: 'text-cyan-400'
-    }
-  ]
+      color: 'text-cyan-400',
+    },
+  ];
 
   const getChangeColor = (change?: number) => {
-    if (!change) return 'text-gray-400'
-    return change > 0 ? 'text-green-400' : 'text-red-400'
-  }
+    if (!change) return 'text-gray-400';
+    return change > 0 ? 'text-green-400' : 'text-red-400';
+  };
 
   const getChangeSymbol = (change?: number) => {
-    if (!change) return ''
-    return change > 0 ? '+' : ''
-  }
+    if (!change) return '';
+    return change > 0 ? '+' : '';
+  };
 
   const formatTime = (timestamp: number) => {
     return new Date(timestamp).toLocaleTimeString('en-US', {
       hour: '2-digit',
-      minute: '2-digit'
-    })
-  }
+      minute: '2-digit',
+    });
+  };
 
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-start md:items-center justify-between flex-col md:flex-row gap-4">
         <div>
           <h2 className="text-2xl font-bold mb-2">Network Statistics</h2>
           <p className="text-gray-400">
@@ -178,10 +184,12 @@ export default function NetworkStats() {
         </div>
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-2">
-            <div className={`w-2 h-2 rounded-full ${isLive ? 'bg-green-500' : 'bg-red-500'} animate-pulse`} />
-            <span className="text-sm text-gray-400">
-              {isLive ? 'Live' : 'Paused'}
-            </span>
+            <div
+              className={`w-2 h-2 rounded-full ${
+                isLive ? 'bg-green-500' : 'bg-red-500'
+              } animate-pulse`}
+            />
+            <span className="text-sm text-gray-400">{isLive ? 'Live' : 'Paused'}</span>
           </div>
           <Button
             variant="outline"
@@ -202,7 +210,11 @@ export default function NetworkStats() {
             variant={selectedTimeframe === timeframe ? 'default' : 'outline'}
             size="sm"
             onClick={() => setSelectedTimeframe(timeframe)}
-            className={selectedTimeframe === timeframe ? 'bg-[#fb73ea] text-black' : 'border-[#fb73ea]/30 text-gray-300'}
+            className={
+              selectedTimeframe === timeframe
+                ? 'bg-[#fb73ea] text-black'
+                : 'border-[#fb73ea]/30 text-gray-300'
+            }
           >
             {timeframe}
           </Button>
@@ -212,7 +224,7 @@ export default function NetworkStats() {
       {/* Main Metrics Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {networkMetrics.map((metric, index) => {
-          const Icon = metric.icon
+          const Icon = metric.icon;
           return (
             <Card
               key={index}
@@ -220,13 +232,19 @@ export default function NetworkStats() {
             >
               <CardContent className="p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <div className={`p-3 rounded-lg bg-black/50 ${metric.color.replace('text', 'bg')}/20`}>
+                  <div
+                    className={`p-3 rounded-lg bg-black/50 ${metric.color.replace(
+                      'text',
+                      'bg',
+                    )}/20`}
+                  >
                     <Icon className={`w-6 h-6 ${metric.color}`} />
                   </div>
                   {metric.change && (
                     <div className={`flex items-center text-sm ${getChangeColor(metric.change)}`}>
                       <TrendingUp className="w-3 h-3 mr-1" />
-                      {getChangeSymbol(metric.change)}{metric.change}%
+                      {getChangeSymbol(metric.change)}
+                      {metric.change}%
                     </div>
                   )}
                 </div>
@@ -236,7 +254,7 @@ export default function NetworkStats() {
                 </div>
               </CardContent>
             </Card>
-          )
+          );
         })}
       </div>
 
@@ -263,8 +281,16 @@ export default function NetworkStats() {
             </div>
             <div className="flex items-center justify-between mt-2 text-xs text-gray-400">
               <span>{formatTime(realtimeData[0]?.timestamp || Date.now())}</span>
-              <span>Current: {realtimeData.length > 0 ? realtimeData[realtimeData.length - 1].bandwidth.toFixed(1) : '0'} GB/s</span>
-              <span>{formatTime(realtimeData[realtimeData.length - 1]?.timestamp || Date.now())}</span>
+              <span>
+                Current:{' '}
+                {realtimeData.length > 0
+                  ? realtimeData[realtimeData.length - 1].bandwidth.toFixed(1)
+                  : '0'}{' '}
+                GB/s
+              </span>
+              <span>
+                {formatTime(realtimeData[realtimeData.length - 1]?.timestamp || Date.now())}
+              </span>
             </div>
           </CardContent>
         </Card>
@@ -290,8 +316,16 @@ export default function NetworkStats() {
             </div>
             <div className="flex items-center justify-between mt-2 text-xs text-gray-400">
               <span>{formatTime(realtimeData[0]?.timestamp || Date.now())}</span>
-              <span>Current: {realtimeData.length > 0 ? realtimeData[realtimeData.length - 1].latency.toFixed(1) : '0'}ms</span>
-              <span>{formatTime(realtimeData[realtimeData.length - 1]?.timestamp || Date.now())}</span>
+              <span>
+                Current:{' '}
+                {realtimeData.length > 0
+                  ? realtimeData[realtimeData.length - 1].latency.toFixed(1)
+                  : '0'}
+                ms
+              </span>
+              <span>
+                {formatTime(realtimeData[realtimeData.length - 1]?.timestamp || Date.now())}
+              </span>
             </div>
           </CardContent>
         </Card>
@@ -345,19 +379,27 @@ export default function NetworkStats() {
                 </div>
                 <div className="flex items-center justify-between p-3 bg-black/30 rounded-lg">
                   <span className="text-sm text-gray-300">Total Likes</span>
-                  <span className="font-semibold text-green-400">{twitterStats.totalLikes.toLocaleString()}</span>
+                  <span className="font-semibold text-green-400">
+                    {twitterStats.totalLikes.toLocaleString()}
+                  </span>
                 </div>
                 <div className="flex items-center justify-between p-3 bg-black/30 rounded-lg">
                   <span className="text-sm text-gray-300">Total Retweets</span>
-                  <span className="font-semibold text-blue-400">{twitterStats.totalRetweets.toLocaleString()}</span>
+                  <span className="font-semibold text-blue-400">
+                    {twitterStats.totalRetweets.toLocaleString()}
+                  </span>
                 </div>
                 <div className="flex items-center justify-between p-3 bg-black/30 rounded-lg">
                   <span className="text-sm text-gray-300">Avg. Engagement</span>
-                  <span className="font-semibold text-[#fb73ea]">{twitterStats.averageEngagement}</span>
+                  <span className="font-semibold text-[#fb73ea]">
+                    {twitterStats.averageEngagement}
+                  </span>
                 </div>
                 <div className="flex items-center justify-between p-3 bg-black/30 rounded-lg">
                   <span className="text-sm text-gray-300">Total Reach</span>
-                  <span className="font-semibold text-purple-400">{(twitterStats.totalViews / 1000).toFixed(0)}K</span>
+                  <span className="font-semibold text-purple-400">
+                    {(twitterStats.totalViews / 1000).toFixed(0)}K
+                  </span>
                 </div>
               </div>
             ) : (
@@ -504,5 +546,5 @@ export default function NetworkStats() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

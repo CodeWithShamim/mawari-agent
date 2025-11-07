@@ -1,87 +1,89 @@
-'use client'
+'use client';
 
-import { useState, useEffect, useRef } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Send, Loader2, Bot, User, Sparkles, Zap } from 'lucide-react'
-import { ROMAMessage, romaService } from '@/lib/roma'
+import { useState, useEffect, useRef } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Send, Loader2, Bot, User, Sparkles, Zap } from 'lucide-react';
+import { ROMAMessage, romaService } from '@/lib/roma';
 
 interface AIChatboxProps {
-  isROMAConnected: boolean
+  isROMAConnected: boolean;
 }
 
 export default function AIChatbox({ isROMAConnected }: AIChatboxProps) {
   const [messages, setMessages] = useState<ROMAMessage[]>([
     {
       role: 'assistant',
-      content: 'Hello! I\'m your Mawari Network AI assistant. I can help you understand everything about Mawari\'s decentralized infrastructure for immersive experiences, XR streaming, AI-powered content delivery, and the future of the 3D internet. What would you like to know?',
-      timestamp: new Date()
-    }
-  ])
-  const [inputValue, setInputValue] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-  const [typingIndicator, setTypingIndicator] = useState(false)
-  const messagesEndRef = useRef<HTMLDivElement>(null)
-  const inputRef = useRef<HTMLInputElement>(null)
+      content:
+        "Hello! I'm your Mawari Network AI assistant. I can help you understand everything about Mawari's decentralized infrastructure for immersive experiences, XR streaming, AI-powered content delivery, and the future of the 3D internet. What would you like to know?",
+      timestamp: new Date(),
+    },
+  ]);
+  const [inputValue, setInputValue] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [typingIndicator, setTypingIndicator] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   useEffect(() => {
-    scrollToBottom()
-  }, [messages])
+    scrollToBottom();
+  }, [messages]);
 
   const handleSendMessage = async () => {
-    if (!inputValue.trim() || isLoading) return
+    if (!inputValue.trim() || isLoading) return;
 
     const userMessage: ROMAMessage = {
       role: 'user',
       content: inputValue.trim(),
-      timestamp: new Date()
-    }
+      timestamp: new Date(),
+    };
 
-    setMessages(prev => [...prev, userMessage])
-    setInputValue('')
-    setIsLoading(true)
-    setTypingIndicator(true)
+    setMessages((prev) => [...prev, userMessage]);
+    setInputValue('');
+    setIsLoading(true);
+    setTypingIndicator(true);
 
     try {
       const response = await romaService.askMawariAI(
         userMessage.content,
-        messages.slice(-10) // Send last 10 messages for context
-      )
+        messages.slice(-10), // Send last 10 messages for context
+      );
 
       const assistantMessage: ROMAMessage = {
         role: 'assistant',
         content: response.answer,
-        timestamp: new Date()
-      }
+        timestamp: new Date(),
+      };
 
-      setMessages(prev => [...prev, assistantMessage])
+      setMessages((prev) => [...prev, assistantMessage]);
     } catch (error) {
-      console.error('Error getting AI response:', error)
+      console.error('Error getting AI response:', error);
 
       const errorMessage: ROMAMessage = {
         role: 'assistant',
-        content: 'I apologize, but I encountered an error processing your request. Please try again or visit mawari.net for more information.',
-        timestamp: new Date()
-      }
+        content:
+          'I apologize, but I encountered an error processing your request. Please try again or visit mawari.net for more information.',
+        timestamp: new Date(),
+      };
 
-      setMessages(prev => [...prev, errorMessage])
+      setMessages((prev) => [...prev, errorMessage]);
     } finally {
-      setIsLoading(false)
-      setTypingIndicator(false)
-      inputRef.current?.focus()
+      setIsLoading(false);
+      setTypingIndicator(false);
+      inputRef.current?.focus();
     }
-  }
+  };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault()
-      handleSendMessage()
+      e.preventDefault();
+      handleSendMessage();
     }
-  }
+  };
 
   const suggestedQuestions = [
     'What is Mawari Network?',
@@ -89,13 +91,13 @@ export default function AIChatbox({ isROMAConnected }: AIChatboxProps) {
     'What are the benefits of running a node?',
     'How does Mawari reduce bandwidth usage?',
     'What is XR streaming?',
-    'How can I join the Mawari ecosystem?'
-  ]
+    'How can I join the Mawari ecosystem?',
+  ];
 
   const handleSuggestedQuestion = (question: string) => {
-    setInputValue(question)
-    inputRef.current?.focus()
-  }
+    setInputValue(question);
+    inputRef.current?.focus();
+  };
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
@@ -109,7 +111,11 @@ export default function AIChatbox({ isROMAConnected }: AIChatboxProps) {
                 Mawari AI Assistant
               </CardTitle>
               <div className="flex items-center space-x-2">
-                <div className={`w-2 h-2 rounded-full ${isROMAConnected ? 'bg-green-500' : 'bg-yellow-500'} animate-pulse`} />
+                <div
+                  className={`w-2 h-2 rounded-full ${
+                    isROMAConnected ? 'bg-green-500' : 'bg-yellow-500'
+                  } animate-pulse`}
+                />
                 <span className="text-sm text-gray-400">
                   {isROMAConnected ? 'ROMA Powered' : 'Fallback Mode'}
                 </span>
@@ -117,7 +123,7 @@ export default function AIChatbox({ isROMAConnected }: AIChatboxProps) {
             </div>
           </CardHeader>
 
-          <CardContent className="flex-1 flex flex-col p-0">
+          <CardContent className="flex-1 flex flex-col p-0 overflow-auto">
             {/* Messages */}
             <div className="flex-1 overflow-y-auto p-6 space-y-4">
               {messages.map((message, index) => (
@@ -162,8 +168,14 @@ export default function AIChatbox({ isROMAConnected }: AIChatboxProps) {
                   <div className="bg-black/50 border border-[#fb73ea]/30 backdrop-blur-sm p-4 rounded-lg">
                     <div className="flex items-center space-x-2">
                       <div className="w-2 h-2 bg-[#fb73ea] rounded-full animate-bounce" />
-                      <div className="w-2 h-2 bg-[#fb73ea] rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
-                      <div className="w-2 h-2 bg-[#fb73ea] rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
+                      <div
+                        className="w-2 h-2 bg-[#fb73ea] rounded-full animate-bounce"
+                        style={{ animationDelay: '0.1s' }}
+                      />
+                      <div
+                        className="w-2 h-2 bg-[#fb73ea] rounded-full animate-bounce"
+                        style={{ animationDelay: '0.2s' }}
+                      />
                     </div>
                   </div>
                 </div>
@@ -268,7 +280,11 @@ export default function AIChatbox({ isROMAConnected }: AIChatboxProps) {
             <div className="flex items-center justify-between">
               <span className="text-sm text-gray-400">AI Engine</span>
               <div className="flex items-center space-x-2">
-                <div className={`w-2 h-2 rounded-full ${isROMAConnected ? 'bg-green-500' : 'bg-yellow-500'} animate-pulse`} />
+                <div
+                  className={`w-2 h-2 rounded-full ${
+                    isROMAConnected ? 'bg-green-500' : 'bg-yellow-500'
+                  } animate-pulse`}
+                />
                 <span className="text-xs text-gray-400">
                   {isROMAConnected ? 'ROMA' : 'Fallback'}
                 </span>
@@ -278,5 +294,5 @@ export default function AIChatbox({ isROMAConnected }: AIChatboxProps) {
         </Card>
       </div>
     </div>
-  )
+  );
 }

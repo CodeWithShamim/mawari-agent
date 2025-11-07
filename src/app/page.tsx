@@ -14,12 +14,14 @@ import {
   Zap,
   Shield,
   Loader2,
+  Badge,
 } from 'lucide-react';
 import AIChatbox from '@/components/AIChatbox';
 import EventsTab from '@/components/EventsTab';
 import NetworkStats from '@/components/NetworkStats';
 import { romaService } from '@/lib/roma';
 import { LoadingAnimation } from '@/components/ui/animations';
+import Link from 'next/link';
 
 export default function HomePage() {
   const [isROMAConnected, setIsROMAConnected] = useState(false);
@@ -70,7 +72,13 @@ export default function HomePage() {
                 </div>
               </div>
               <div>
-                <h1 className="text-2xl font-bold glow-text">Mawari AI Agent</h1>
+                <h1 className="text-2xl font-bold glow-text">
+                  Mawari AI Agent{' '}
+                  <span className="bg-[#fb73ea]/20 text-[#fb73ea] border border-[#fb73ea]/40 text-lg animate-pulse">
+                    Unofficial
+                  </span>
+                </h1>
+
                 <p className="text-gray-400 text-sm">Your Gateway to the Immersive Internet</p>
               </div>
             </div>
@@ -86,9 +94,11 @@ export default function HomePage() {
                   {isROMAConnected ? 'ROMA Connected' : 'Fallback Mode'}
                 </span>
               </div>
-              <Button variant="cyber" size="sm">
+              <Button variant="cyber" size="sm" className="hidden md:flex">
                 <Globe className="w-4 h-4 mr-2" />
-                Mawari.net
+                <Link target="_blank" href={'https://mawari.net'}>
+                  Mawari.net
+                </Link>
               </Button>
             </div>
           </div>
