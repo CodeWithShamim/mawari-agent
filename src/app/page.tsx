@@ -15,6 +15,7 @@ import {
   Shield,
   Loader2,
   Badge,
+  Twitter,
 } from 'lucide-react';
 import AIChatbox from '@/components/AIChatbox';
 import EventsTab from '@/components/EventsTab';
@@ -94,6 +95,12 @@ export default function HomePage() {
                   {isROMAConnected ? 'ROMA Connected' : 'Fallback Mode'}
                 </span>
               </div>
+              <Link href="/mawari-tweets">
+                <Button variant="cyber" size="sm" className="hidden md:flex bg-white">
+                  <Twitter className="w-4 h-4 mr-2" />
+                  Tweets
+                </Button>
+              </Link>
               <Button variant="cyber" size="sm" className="hidden md:flex">
                 <Globe className="w-4 h-4 mr-2" />
                 <Link target="_blank" href={'https://mawari.net'}>

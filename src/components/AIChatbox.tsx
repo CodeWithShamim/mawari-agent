@@ -217,7 +217,7 @@ export default function AIChatbox({ isROMAConnected }: AIChatboxProps) {
       {/* Sidebar */}
       <div className="lg:col-span-1 space-y-6">
         {/* Suggested Questions */}
-        <Card className="cyber-border bg-black/50 backdrop-blur-sm border-[#fb73ea]/30">
+        <Card className="cyber-border bg-black/50 backdrop-blur-sm border-[#fb73ea]/30 overflow-hidden  ">
           <CardHeader>
             <CardTitle className="text-lg font-bold flex items-center">
               <Sparkles className="w-5 h-5 mr-2 text-[#fb73ea]" />
