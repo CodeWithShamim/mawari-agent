@@ -16,6 +16,7 @@ import {
   Loader2,
 } from 'lucide-react';
 import AIChatbox from '@/components/AIChatbox';
+import EventsTab from '@/components/EventsTab';
 import NetworkStats from '@/components/NetworkStats';
 import { romaService } from '@/lib/roma';
 import { LoadingAnimation } from '@/components/ui/animations';
@@ -183,6 +184,10 @@ export default function HomePage() {
 
           <TabsContent value="chat" className="mt-6">
             <AIChatbox isROMAConnected={isROMAConnected} />
+          </TabsContent>
+
+          <TabsContent value="events" className="mt-6">
+            <EventsTab />
           </TabsContent>
 
           <TabsContent value="network" className="mt-6">
