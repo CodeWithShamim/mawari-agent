@@ -48,8 +48,8 @@ export default function AIChatbox({ isROMAConnected }: AIChatboxProps) {
     setTypingIndicator(true);
 
     try {
-      // Use our new AI endpoint for real responses
-      const response = await fetch('/api/ai-chat', {
+      // Use ROMA-DSPy AI endpoint
+      const response = await fetch('/api/roma-ai', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -125,7 +125,7 @@ export default function AIChatbox({ isROMAConnected }: AIChatboxProps) {
                   } animate-pulse`}
                 />
                 <span className="text-sm text-gray-400">
-                  {isROMAConnected ? 'AI Powered' : 'Fallback Mode'}
+                  {isROMAConnected ? 'ROMA-DSPy' : 'Fallback Mode'}
                 </span>
               </div>
             </div>
@@ -294,7 +294,7 @@ export default function AIChatbox({ isROMAConnected }: AIChatboxProps) {
                   } animate-pulse`}
                 />
                 <span className="text-xs text-gray-400">
-                  {isROMAConnected ? 'AI' : 'Fallback'}
+                  {isROMAConnected ? 'ROMA' : 'Fallback'}
                 </span>
               </div>
             </div>
