@@ -30,13 +30,23 @@ export default function HomePage() {
   const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
-    // Initialize ROMA service
-    const initializeROMA = async () => {
+    // Check AI service availability
+    const checkAIConnection = async () => {
       try {
-        await romaService.initialize();
-        setIsROMAConnected(true);
+        const response = await fetch('/api/ai-chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            query: 'Hello, are you working?',
+          }),
+        });
+
+        const data = await response.json();
+        setIsROMAConnected(data.success);
       } catch (error) {
-        console.warn('ROMA service not available, using fallback mode');
+        console.warn('AI service not available, using fallback mode');
         setIsROMAConnected(false);
       } finally {
         // Add a small delay for smooth loading animation
@@ -44,7 +54,7 @@ export default function HomePage() {
       }
     };
 
-    initializeROMA();
+    checkAIConnection();
   }, []);
 
   if (!isInitialized) {
@@ -92,7 +102,7 @@ export default function HomePage() {
                   } animate-pulse`}
                 />
                 <span className="text-sm text-gray-400">
-                  {isROMAConnected ? 'ROMA Connected' : 'Fallback Mode'}
+                  {isROMAConnected ? 'AI Connected' : 'Fallback Mode'}
                 </span>
               </div>
               <Link href="/mawari-tweets">

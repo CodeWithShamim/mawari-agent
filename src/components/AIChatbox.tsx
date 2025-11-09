@@ -48,14 +48,22 @@ export default function AIChatbox({ isROMAConnected }: AIChatboxProps) {
     setTypingIndicator(true);
 
     try {
-      const response = await romaService.askMawariAI(
-        userMessage.content,
-        messages.slice(-10), // Send last 10 messages for context
-      );
+      // Use our new AI endpoint for real responses
+      const response = await fetch('/api/ai-chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          query: userMessage.content,
+        }),
+      });
+
+      const data = await response.json();
 
       const assistantMessage: ROMAMessage = {
         role: 'assistant',
-        content: response.answer,
+        content: data.answer,
         timestamp: new Date(),
       };
 
@@ -103,7 +111,7 @@ export default function AIChatbox({ isROMAConnected }: AIChatboxProps) {
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
       {/* Chat Area */}
       <div className="lg:col-span-3">
-        <Card className="cyber-border bg-black/50 backdrop-blur-sm border-[#fb73ea]/30 h-[600px] flex flex-col">
+        <Card className="cyber-border bg-black/50 backdrop-blur-sm border-[#fb73ea]/30 h-[790px] flex flex-col">
           <CardHeader className="border-b border-[#fb73ea]/20">
             <div className="flex items-center justify-between">
               <CardTitle className="text-xl font-bold flex items-center">
@@ -117,7 +125,7 @@ export default function AIChatbox({ isROMAConnected }: AIChatboxProps) {
                   } animate-pulse`}
                 />
                 <span className="text-sm text-gray-400">
-                  {isROMAConnected ? 'ROMA Powered' : 'Fallback Mode'}
+                  {isROMAConnected ? 'AI Powered' : 'Fallback Mode'}
                 </span>
               </div>
             </div>
@@ -286,7 +294,7 @@ export default function AIChatbox({ isROMAConnected }: AIChatboxProps) {
                   } animate-pulse`}
                 />
                 <span className="text-xs text-gray-400">
-                  {isROMAConnected ? 'ROMA' : 'Fallback'}
+                  {isROMAConnected ? 'AI' : 'Fallback'}
                 </span>
               </div>
             </div>
