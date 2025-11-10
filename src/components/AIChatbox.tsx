@@ -4,24 +4,44 @@ import { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Send, Loader2, Bot, User, Sparkles, Zap } from 'lucide-react';
-import { ROMAMessage, romaService } from '@/lib/roma';
+import {
+  ParticleAnimation,
+  ROMALoadingAnimation,
+  DataFlowAnimation,
+  GlitchAnimation,
+  MorphAnimation,
+} from '@/components/ui/animations';
+import { ChatGPTTyping } from '@/components/TypingAnimation';
 
-interface AIChatboxProps {
-  isROMAConnected: boolean;
+interface AIMessage {
+  id?: string;
+  role: 'user' | 'assistant' | 'system';
+  content: string;
+  timestamp: Date;
 }
 
-export default function AIChatbox({ isROMAConnected }: AIChatboxProps) {
-  const [messages, setMessages] = useState<ROMAMessage[]>([
+interface AIChatboxProps {
+  isAIConnected: boolean;
+}
+
+export default function AIChatbox({ isAIConnected }: AIChatboxProps) {
+  const [messages, setMessages] = useState<AIMessage[]>([
     {
+      id: 'welcome-msg',
       role: 'assistant',
-      content:
-        "Hello! I'm your Mawari Network AI assistant. I can help you understand everything about Mawari's decentralized infrastructure for immersive experiences, XR streaming, AI-powered content delivery, and the future of the 3D internet. What would you like to know?",
+      content: `Hello! I'm your Mawari Network AI assistant, powered by Sentient dobby model with the advanced Dobby model. I'm here to help you understand everything about Mawari's decentralized infrastructure for immersive experiences, XR streaming, AI-powered content delivery, and the future of the 3D internet.
+
+What would you like to know about Mawari Network?`,
       timestamp: new Date(),
     },
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [typingIndicator, setTypingIndicator] = useState(false);
+  const [sendingAnimation, setSendingAnimation] = useState(false);
+  const [messageKey, setMessageKey] = useState(0);
+  const [typingMessageId, setTypingMessageId] = useState<string | null>(null);
+  const [completedTyping, setCompletedTyping] = useState<Set<string>>(new Set());
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -36,20 +56,31 @@ export default function AIChatbox({ isROMAConnected }: AIChatboxProps) {
   const handleSendMessage = async () => {
     if (!inputValue.trim() || isLoading) return;
 
-    const userMessage: ROMAMessage = {
+    const userMessage: AIMessage = {
+      id: `user-${Date.now()}`,
       role: 'user',
       content: inputValue.trim(),
       timestamp: new Date(),
     };
 
+    // Trigger sending animation
+    setSendingAnimation(true);
+    setMessageKey((prev) => prev + 1);
+
+    // Add user message with animation
     setMessages((prev) => [...prev, userMessage]);
     setInputValue('');
-    setIsLoading(true);
-    setTypingIndicator(true);
+
+    // Small delay for animation effect
+    setTimeout(() => {
+      setSendingAnimation(false);
+      setIsLoading(true);
+      setTypingIndicator(true);
+    }, 800);
 
     try {
-      // Use ROMA-DSPy AI endpoint
-      const response = await fetch('/api/roma-ai', {
+      // Use Fireworks AI endpoint
+      const response = await fetch('/api/ai-chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -59,30 +90,44 @@ export default function AIChatbox({ isROMAConnected }: AIChatboxProps) {
         }),
       });
 
-      const data = await response.json();
+      if (!response.ok) {
+        throw new Error('Failed to get AI response');
+      }
 
-      const assistantMessage: ROMAMessage = {
+      const aiData = await response.json();
+
+      const messageId = `ai-${Date.now()}`;
+      const assistantMessage: AIMessage = {
+        id: messageId,
         role: 'assistant',
-        content: data.answer,
+        content:
+          aiData.answer || 'I apologize, but I encountered an issue processing your request.',
         timestamp: new Date(),
       };
 
+      // Set typing message ID and add message
+      setTypingMessageId(messageId);
       setMessages((prev) => [...prev, assistantMessage]);
+
+      // Let the typing animation complete naturally without auto-completion
+      // The ChatGPTTyping component will call onComplete when finished
     } catch (error) {
       console.error('Error getting AI response:', error);
 
-      const errorMessage: ROMAMessage = {
+      const errorMessageId = `err-${Date.now()}`;
+      const errorMessage: AIMessage = {
+        id: errorMessageId,
         role: 'assistant',
         content:
-          'I apologize, but I encountered an error processing your request. Please try again or visit mawari.net for more information.',
+          'I apologize, but I encountered an error while processing your request. Please try again or visit mawari.net for more information about Mawari Network.',
         timestamp: new Date(),
       };
 
       setMessages((prev) => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
-      setTypingIndicator(false);
-      inputRef.current?.focus();
+      // Don't set typingIndicator to false here
+      // Let the typing animation complete and call onTypingComplete
     }
   };
 
@@ -107,25 +152,44 @@ export default function AIChatbox({ isROMAConnected }: AIChatboxProps) {
     inputRef.current?.focus();
   };
 
+  const onTypingComplete = (messageId: string) => {
+    setCompletedTyping((prev) => new Set(prev).add(messageId));
+    // Only turn off typing indicator if this is the current typing message
+    if (messageId === typingMessageId) {
+      setTypingIndicator(false);
+    }
+  };
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
       {/* Chat Area */}
       <div className="lg:col-span-3">
-        <Card className="cyber-border bg-black/50 backdrop-blur-sm border-[#fb73ea]/30 h-[790px] flex flex-col">
-          <CardHeader className="border-b border-[#fb73ea]/20">
+        <Card className=" cyber-border bg-black/50 backdrop-blur-sm border-[#fb73ea]/30 h-[620px] flex flex-col">
+          <CardHeader className="border-b border-[#fb73ea]/20 ">
             <div className="flex items-center justify-between">
               <CardTitle className="text-xl font-bold flex items-center">
-                <Bot className="w-6 h-6 mr-2 text-[#fb73ea]" />
+                <div className="relative mr-2">
+                  <Bot className="w-6 h-6 text-[#fb73ea]" />
+                  {isAIConnected && (
+                    <div className="absolute -inset-1 bg-[#fb73ea]/30 rounded-full animate-pulse" />
+                  )}
+                </div>
                 Mawari AI Assistant
               </CardTitle>
               <div className="flex items-center space-x-2">
-                <div
-                  className={`w-2 h-2 rounded-full ${
-                    isROMAConnected ? 'bg-green-500' : 'bg-yellow-500'
-                  } animate-pulse`}
-                />
-                <span className="text-sm text-gray-400">
-                  {isROMAConnected ? 'ROMA-DSPy' : 'Fallback Mode'}
+                <div className="relative">
+                  {isAIConnected ? (
+                    <MorphAnimation size="sm" color="#10b981" />
+                  ) : (
+                    <div className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse" />
+                  )}
+                </div>
+                <span
+                  className={`text-sm transition-colors duration-300 ${
+                    isAIConnected ? 'text-green-400' : 'text-yellow-400'
+                  }`}
+                >
+                  Dobby model ⚡
                 </span>
               </div>
             </div>
@@ -134,57 +198,70 @@ export default function AIChatbox({ isROMAConnected }: AIChatboxProps) {
           <CardContent className="flex-1 flex flex-col p-0 overflow-auto">
             {/* Messages */}
             <div className="flex-1 overflow-y-auto p-6 space-y-4">
+              {sendingAnimation && (
+                <div className="fixed inset-0 pointer-events-none z-50">
+                  <ParticleAnimation key={`particle-${messageKey}`} />
+                </div>
+              )}
+
               {messages.map((message, index) => (
                 <div
-                  key={index}
-                  className={`flex items-start space-x-3 ${
+                  key={message.id}
+                  className={`flex gap-3 ${
                     message.role === 'user' ? 'justify-end' : 'justify-start'
-                  }`}
+                  } animate-fade-in`}
+                  style={{ animationDelay: `${index * 0.1}s` }}
                 >
+                  {/* Avatar */}
                   {message.role === 'assistant' && (
-                    <div className="w-8 h-8 bg-gradient-to-br from-[#fb73ea] to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
+                    <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-[#fb73ea] to-purple-600 rounded-full flex items-center justify-center">
                       <Bot className="w-4 h-4 text-white" />
                     </div>
                   )}
 
                   <div
-                    className={`max-w-[80%] p-4 rounded-lg ${
+                    className={`max-w-[70%] rounded-lg p-4 ${
                       message.role === 'user'
                         ? 'bg-[#fb73ea] text-black'
-                        : 'bg-black/50 border border-[#fb73ea]/30 backdrop-blur-sm'
+                        : 'bg-gray-800 text-white border border-gray-700'
                     }`}
                   >
-                    <p className="text-sm leading-relaxed">{message.content}</p>
-                    <p className="text-xs opacity-60 mt-2">
+                    {message.role === 'assistant' &&
+                    typingIndicator &&
+                    !completedTyping.has(message.id || '') &&
+                    message.id === typingMessageId ? (
+                      <ChatGPTTyping
+                        key={`typing-${message.id}`}
+                        message={message.content || ''}
+                        onComplete={() => onTypingComplete(message.id!)}
+                      />
+                    ) : (
+                      <p className="text-sm leading-relaxed whitespace-pre-wrap">
+                        {message.content || ''}
+                      </p>
+                    )}
+                    <div className="text-xs opacity-70 mt-1">
                       {message.timestamp.toLocaleTimeString()}
-                    </p>
+                    </div>
                   </div>
 
+                  {/* User Avatar */}
                   {message.role === 'user' && (
-                    <div className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center flex-shrink-0">
-                      <User className="w-4 h-4 text-gray-300" />
+                    <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-[#fb73ea] to-blue-300 rounded-full flex items-center justify-center">
+                      <User className="w-4 h-4 text-white" />
                     </div>
                   )}
                 </div>
               ))}
 
-              {typingIndicator && (
-                <div className="flex items-start space-x-3">
-                  <div className="w-8 h-8 bg-gradient-to-br from-[#fb73ea] to-purple-600 rounded-full flex items-center justify-center">
+              {isLoading && (
+                <div className="flex gap-3 justify-start">
+                  {/* Bot Avatar */}
+                  <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-[#fb73ea] to-purple-600 rounded-full flex items-center justify-center">
                     <Bot className="w-4 h-4 text-white" />
                   </div>
-                  <div className="bg-black/50 border border-[#fb73ea]/30 backdrop-blur-sm p-4 rounded-lg">
-                    <div className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-[#fb73ea] rounded-full animate-bounce" />
-                      <div
-                        className="w-2 h-2 bg-[#fb73ea] rounded-full animate-bounce"
-                        style={{ animationDelay: '0.1s' }}
-                      />
-                      <div
-                        className="w-2 h-2 bg-[#fb73ea] rounded-full animate-bounce"
-                        style={{ animationDelay: '0.2s' }}
-                      />
-                    </div>
+                  <div className="bg-gray-800 text-white border border-gray-700 rounded-lg p-4 max-w-[70%] flex items-center gap-2">
+                    <ROMALoadingAnimation /> <span className="text-xs">Thinking...</span>
                   </div>
                 </div>
               )}
@@ -194,21 +271,22 @@ export default function AIChatbox({ isROMAConnected }: AIChatboxProps) {
 
             {/* Input Area */}
             <div className="border-t border-[#fb73ea]/20 p-4">
-              <div className="flex items-center space-x-2">
+              <div className="flex space-x-2">
                 <input
                   ref={inputRef}
                   type="text"
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyPress={handleKeyPress}
-                  placeholder="Ask me anything about Mawari Network..."
-                  className="flex-1 bg-black/50 border border-[#fb73ea]/30 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-[#fb73ea] focus:ring-1 focus:ring-[#fb73ea]"
+                  placeholder="Ask about Mawari Network..."
+                  className="flex-1 px-4 py-2 bg-black/50 border border-[#fb73ea]/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#fb73ea] focus:border-opacity-50 transition-all duration-300"
                   disabled={isLoading}
                 />
                 <Button
                   onClick={handleSendMessage}
                   disabled={!inputValue.trim() || isLoading}
-                  className="bg-[#fb73ea] hover:bg-[#fb73ea]/90 text-black"
+                  className="bg-[#fb73ea] hover:bg-[#fb73ea]/90 text-black hover-lift smooth-transition disabled:opacity-50"
+                  size="sm"
                 >
                   {isLoading ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
@@ -217,85 +295,71 @@ export default function AIChatbox({ isROMAConnected }: AIChatboxProps) {
                   )}
                 </Button>
               </div>
+
+              {/* Suggested Questions */}
+              <div className="mt-4">
+                <p className="text-xs text-gray-500 mb-2">Suggested questions:</p>
+                <div className="flex flex-wrap gap-2">
+                  {suggestedQuestions.map((question, index) => (
+                    <button
+                      key={index}
+                      onClick={() => handleSuggestedQuestion(question)}
+                      className="px-3 py-1 bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs rounded-full border border-gray-600 hover-lift smooth-transition"
+                    >
+                      {question}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
           </CardContent>
         </Card>
       </div>
 
       {/* Sidebar */}
-      <div className="lg:col-span-1 space-y-6">
-        {/* Suggested Questions */}
-        <Card className="cyber-border bg-black/50 backdrop-blur-sm border-[#fb73ea]/30 overflow-hidden  ">
+      <div className="lg:col-span-1">
+        <Card className="cyber-border bg-black/50 backdrop-blur-sm border-[#fb73ea]/30  h-[620px]">
           <CardHeader>
             <CardTitle className="text-lg font-bold flex items-center">
               <Sparkles className="w-5 h-5 mr-2 text-[#fb73ea]" />
-              Suggested Questions
+              AI Insights
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-2">
-            {suggestedQuestions.map((question, index) => (
-              <Button
-                key={index}
-                variant="ghost"
-                className="w-full text-left text-sm justify-start h-auto p-3 text-gray-300 hover:text-white hover:bg-[#fb73ea]/10 transition-colors"
-                onClick={() => handleSuggestedQuestion(question)}
-              >
-                {question}
-              </Button>
-            ))}
-          </CardContent>
-        </Card>
+          <CardContent className="space-y-4">
+            <div className="p-4 bg-gray-800/50 rounded-lg border border-gray-700">
+              <h4 className="text-sm font-semibold text-[#fb73ea] mb-2">About Mawari Network</h4>
+              <p className="text-xs text-gray-400 leading-relaxed">
+                Mawari delivers embodied AI through a global network of distributed nodes, achieving
+                80% bandwidth reduction while maintaining 99.9% uptime for XR content streaming.
+              </p>
+            </div>
 
-        {/* AI Capabilities */}
-        <Card className="cyber-border bg-black/50 backdrop-blur-sm border-[#fb73ea]/30">
-          <CardHeader>
-            <CardTitle className="text-lg font-bold flex items-center">
-              <Zap className="w-5 h-5 mr-2 text-[#fb73ea]" />
-              AI Capabilities
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="flex items-center space-x-2">
-              <div className="w-2 h-2 bg-[#fb73ea] rounded-full" />
-              <span className="text-sm text-gray-300">Network Technology</span>
+            <div className="p-4 bg-gray-800/50 rounded-lg border border-gray-700">
+              <h4 className="text-sm font-semibold text-[#fb73ea] mb-2">Key Technologies</h4>
+              <ul className="text-xs text-gray-400 space-y-1">
+                <li>• DePIN Architecture</li>
+                <li>• XR Streaming</li>
+                <li>• Edge Computing</li>
+                <li>• AI-Powered Experiences</li>
+                <li>• Distributed GPU Processing</li>
+              </ul>
             </div>
-            <div className="flex items-center space-x-2">
-              <div className="w-2 h-2 bg-[#fb73ea] rounded-full" />
-              <span className="text-sm text-gray-300">DePIN Infrastructure</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <div className="w-2 h-2 bg-[#fb73ea] rounded-full" />
-              <span className="text-sm text-gray-300">XR Streaming</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <div className="w-2 h-2 bg-[#fb73ea] rounded-full" />
-              <span className="text-sm text-gray-300">Node Operations</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <div className="w-2 h-2 bg-[#fb73ea] rounded-full" />
-              <span className="text-sm text-gray-300">Bandwidth Optimization</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <div className="w-2 h-2 bg-[#fb73ea] rounded-full" />
-              <span className="text-sm text-gray-300">Real-time Analytics</span>
-            </div>
-          </CardContent>
-        </Card>
 
-        {/* Connection Status */}
-        <Card className="cyber-border bg-black/50 backdrop-blur-sm border-[#fb73ea]/30">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-400">AI Engine</span>
-              <div className="flex items-center space-x-2">
-                <div
-                  className={`w-2 h-2 rounded-full ${
-                    isROMAConnected ? 'bg-green-500' : 'bg-yellow-500'
-                  } animate-pulse`}
-                />
-                <span className="text-xs text-gray-400">
-                  {isROMAConnected ? 'ROMA' : 'Fallback'}
-                </span>
+            <div className="p-4 bg-gray-800/50 rounded-lg border border-gray-700">
+              <h4 className="text-sm font-semibold text-[#fb73ea] mb-2">Performance</h4>
+              <div className="space-y-2">
+                <div className="flex justify-between text-xs">
+                  <span className="text-gray-400">Uptime</span>
+                  <span className="text-green-400">99.9%</span>
+                </div>
+                <div className="flex justify-between text-xs">
+                  <span className="text-gray-400">Bandwidth</span>
+                  <span className="text-[#fb73ea]">-80%</span>
+                </div>
+                <div className="flex justify-between text-xs">
+                  <span className="text-gray-400">Latency</span>
+                  <span className="text-blue-400">&lt;10ms</span>
+                </div>
               </div>
             </div>
           </CardContent>

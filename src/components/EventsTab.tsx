@@ -170,110 +170,141 @@ export default function EventsTab() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64">
+      <div className="flex items-center justify-center h-64 animate-fade-in">
         <div className="text-center">
-          <div className="w-8 h-8 border-2 border-[#fb73ea] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-gray-400">Loading events...</p>
+          <div className="relative w-16 h-16 mx-auto mb-6">
+            <div className="w-16 h-16 border-2 border-[#fb73ea]/30 border-t-[#fb73ea] rounded-full animate-spin-slow" />
+            <div className="absolute inset-2 border border-[#fb73ea]/20 border-t-transparent rounded-full animate-spin" />
+            <div className="absolute inset-4 border border-[#fb73ea]/10 border-t-transparent rounded-full animate-spin" style={{ animationDuration: '1s' }} />
+          </div>
+          <div className="space-y-2">
+            <p className="text-gray-400 animate-pulse">Loading events...</p>
+            <div className="flex justify-center space-x-1">
+              <div className="w-1 h-1 bg-[#fb73ea] rounded-full animate-bounce" />
+              <div className="w-1 h-1 bg-[#fb73ea] rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
+              <div className="w-1 h-1 bg-[#fb73ea] rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
+            </div>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-start md:items-center justify-between flex-col md:flex-row gap-4">
-        <div>
-          <h2 className="text-2xl font-bold mb-2">Mawari Network Events</h2>
-          <p className="text-gray-400">
+    <div className="space-y-6 animate-fade-in">
+      {/* Enhanced Header */}
+      <div className="flex items-start md:items-center justify-between flex-col md:flex-row gap-4 animate-slide-in-down">
+        <div className="animate-expand-in">
+          <h2 className="text-2xl font-bold mb-2 glow-text">Mawari Network Events</h2>
+          <p className="text-gray-400 animate-slide-and-fade">
             Stay updated with the latest happenings in the Mawari ecosystem
           </p>
         </div>
-        <div className="flex items-center space-x-4">
-          <Button variant="cyber" size="sm">
-            <Calendar className="w-4 h-4 mr-2" />
+        <div className="flex items-center space-x-4 animate-slide-in-right">
+          <Button variant="cyber" size="sm" className="hover-scale hover-glow smooth-transition group">
+            <Calendar className="w-4 h-4 mr-2 group-hover:animate-bounce" />
             Subscribe to Calendar
           </Button>
         </div>
       </div>
 
-      {/* Filter Buttons */}
-      <div className="flex flex-wrap gap-2">
-        {filterButtons.map(({ value, label }) => (
+      {/* Enhanced Filter Buttons */}
+      <div className="flex flex-wrap gap-2 animate-fade-in-up">
+        {filterButtons.map(({ value, label }, index) => (
           <Button
             key={value}
             variant={activeFilter === value ? 'default' : 'outline'}
             size="sm"
             onClick={() => setActiveFilter(value)}
-            className={
+            className={`smooth-transition hover-scale ${
               activeFilter === value
-                ? 'bg-[#fb73ea] text-black'
-                : 'border-[#fb73ea]/30 text-gray-300 hover:border-[#fb73ea]'
-            }
+                ? 'bg-[#fb73ea] text-black shadow-lg shadow-[#fb73ea]/30 animate-scale-in'
+                : 'border-[#fb73ea]/30 text-gray-300 hover:border-[#fb73ea] hover:bg-[#fb73ea]/10'
+            } animate-stagger-${index + 1}`}
           >
             {label}
+            {activeFilter === value && (
+              <div className="ml-2 w-1 h-1 bg-black rounded-full animate-ping" />
+            )}
           </Button>
         ))}
       </div>
 
-      {/* Upcoming Events */}
+      {/* Enhanced Upcoming Events */}
       {getFilteredUpcomingEvents().length > 0 && (
-        <div>
-          <h3 className="text-xl font-bold mb-4 flex items-center">
-            <Calendar className="w-5 h-5 mr-2 text-[#fb73ea]" />
+        <div className="animate-expand-in">
+          <h3 className="text-xl font-bold mb-4 flex items-center animate-slide-in-left">
+            <div className="relative mr-2">
+              <Calendar className="w-5 h-5 text-[#fb73ea] animate-pulse" />
+              <div className="absolute inset-0 bg-[#fb73ea]/30 rounded-full blur-sm animate-pulse" />
+            </div>
             Upcoming Events
+            <div className="ml-2 w-2 h-2 bg-[#fb73ea] rounded-full animate-ping" />
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {getFilteredUpcomingEvents().map((event) => (
+            {getFilteredUpcomingEvents().map((event, index) => (
               <Card
                 key={event.id}
                 className={`cyber-border bg-black/50 backdrop-blur-sm ${getEventColor(
                   event.type,
-                )} hover:scale-105 transition-all duration-300`}
+                )} hover-lift hover-glow gpu-accelerated smooth-transition animate-stagger-${
+                  (index % 6) + 1
+                } group relative overflow-hidden`}
               >
-                <CardHeader className="pb-3">
+                {/* Add shimmer overlay */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer pointer-events-none" />
+
+                <CardHeader className="pb-3 relative z-10">
                   <div className="flex items-start justify-between">
                     <div className="flex items-center space-x-2">
-                      {getEventIcon(event.type)}
-                      <span className="text-xs font-medium uppercase tracking-wider">
+                      <div className="group-hover:animate-bounce">
+                        {getEventIcon(event.type)}
+                      </div>
+                      <span className="text-xs font-medium uppercase tracking-wider animate-slide-and-fade">
                         {event.type.replace('_', ' ')}
                       </span>
                     </div>
-                    {getStatusBadge(event.status)}
+                    <div className="animate-scale-in">
+                      {getStatusBadge(event.status)}
+                    </div>
                   </div>
-                  <CardTitle className="text-lg leading-tight">{event.title}</CardTitle>
+                  <CardTitle className="text-lg leading-tight group-hover:text-[#fb73ea] transition-colors duration-300">
+                    {event.title}
+                  </CardTitle>
                 </CardHeader>
 
-                <CardContent className="space-y-4">
-                  <p className="text-sm text-gray-300 line-clamp-3">{event.description}</p>
+                <CardContent className="space-y-4 relative z-10">
+                  <p className="text-sm text-gray-300 line-clamp-3 animate-slide-and-fade">
+                    {event.description}
+                  </p>
 
                   <div className="space-y-2">
-                    <div className="flex items-center text-sm text-gray-400">
-                      <Calendar className="w-4 h-4 mr-2" />
+                    <div className="flex items-center text-sm text-gray-400 hover:text-gray-300 smooth-transition group/item">
+                      <Calendar className="w-4 h-4 mr-2 group-hover/item:animate-bounce" />
                       {formatDate(event.startTime)}
                     </div>
-                    <div className="flex items-center text-sm text-gray-400">
-                      <Clock className="w-4 h-4 mr-2" />
+                    <div className="flex items-center text-sm text-gray-400 hover:text-gray-300 smooth-transition group/item">
+                      <Clock className="w-4 h-4 mr-2 group-hover/item:animate-bounce" style={{ animationDelay: '0.1s' }} />
                       {formatTime(event.startTime)}
                     </div>
                     {event.location && (
-                      <div className="flex items-center text-sm text-gray-400">
-                        <MapPin className="w-4 h-4 mr-2" />
+                      <div className="flex items-center text-sm text-gray-400 hover:text-gray-300 smooth-transition group/item">
+                        <MapPin className="w-4 h-4 mr-2 group-hover/item:animate-bounce" style={{ animationDelay: '0.2s' }} />
                         {event.location}
                       </div>
                     )}
                   </div>
 
-                  <div className="flex items-center justify-between pt-2 border-t border-gray-700">
-                    <span className="text-xs text-gray-500">
+                  <div className="flex items-center justify-between pt-2 border-t border-gray-700 group-hover:border-[#fb73ea]/30 smooth-transition">
+                    <span className="text-xs text-gray-500 group-hover:text-gray-400 smooth-transition">
                       {getTimeUntil(event.startTime)} from now
                     </span>
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="text-[#fb73ea] hover:text-[#fb73ea]/80"
+                      className="text-[#fb73ea] hover:text-[#fb73ea]/80 hover:scale-110 smooth-transition group/button"
                     >
-                      <ExternalLink className="w-3 h-3 mr-1" />
+                      <ExternalLink className="w-3 h-3 mr-1 group-hover/button:translate-x-0.5 transition-transform" />
                       Details
                     </Button>
                   </div>
@@ -284,41 +315,49 @@ export default function EventsTab() {
         </div>
       )}
 
-      {/* Live Event */}
+      {/* Enhanced Live Event with dramatic animations */}
       {events.some((event) => event.status === 'live') && (
-        <div className="relative">
-          <div className="absolute inset-0 bg-gradient-to-r from-red-600/20 to-orange-600/20 rounded-lg animate-pulse" />
-          <Card className="cyber-border bg-black/50 backdrop-blur-sm border-red-500/50 relative">
-            <CardHeader>
+        <div className="relative animate-bounce-in">
+          <div className="absolute inset-0 bg-gradient-to-r from-red-600/20 to-orange-600/20 rounded-lg animate-pulse-glow" />
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-red-500/10 to-transparent animate-shimmer" />
+          <Card className="cyber-border bg-black/50 backdrop-blur-sm border-red-500/50 relative hover-lift hover-glow smooth-transition">
+            <CardHeader className="relative">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
-                  <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse" />
-                  <h3 className="text-xl font-bold text-red-400">LIVE NOW</h3>
+                  <div className="relative">
+                    <div className="w-4 h-4 bg-red-500 rounded-full animate-pulse" />
+                    <div className="absolute inset-0 bg-red-500 rounded-full animate-ping" />
+                  </div>
+                  <h3 className="text-xl font-bold text-red-400 animate-pulse-glow">
+                    🔴 LIVE NOW
+                  </h3>
+                  <div className="w-2 h-2 bg-red-500 rounded-full animate-bounce" />
                 </div>
                 <Button
                   variant="outline"
                   size="sm"
-                  className="border-red-500 text-red-400 hover:bg-red-500 hover:text-white"
+                  className="border-red-500 text-red-400 hover:bg-red-500 hover:text-white hover-scale hover-glow smooth-transition group"
                 >
-                  <Video className="w-4 h-4 mr-2" />
+                  <Video className="w-4 h-4 mr-2 group-hover:animate-bounce" />
                   Join Stream
+                  <div className="ml-2 w-1 h-1 bg-red-400 rounded-full animate-ping" />
                 </Button>
               </div>
             </CardHeader>
-            <CardContent>
+            <CardContent className="relative">
               {events
                 .filter((event) => event.status === 'live')
                 .map((event) => (
-                  <div key={event.id} className="text-center py-4">
-                    <h4 className="text-2xl font-bold mb-2">{event.title}</h4>
-                    <p className="text-gray-300 mb-4">{event.description}</p>
+                  <div key={event.id} className="text-center py-4 animate-scale-in">
+                    <h4 className="text-2xl font-bold mb-2 glow-text animate-pulse">{event.title}</h4>
+                    <p className="text-gray-300 mb-4 animate-slide-and-fade">{event.description}</p>
                     <div className="flex items-center justify-center space-x-6 text-sm text-gray-400">
-                      <div className="flex items-center">
-                        <Users className="w-4 h-4 mr-2" />
-                        {event.attendees || 0} attending
+                      <div className="flex items-center hover:text-gray-300 smooth-transition group/item">
+                        <Users className="w-4 h-4 mr-2 group-hover/item:animate-bounce" />
+                        <span className="font-medium">{event.attendees || 0}</span> attending
                       </div>
-                      <div className="flex items-center">
-                        <Clock className="w-4 h-4 mr-2" />
+                      <div className="flex items-center hover:text-gray-300 smooth-transition group/item">
+                        <Clock className="w-4 h-4 mr-2 group-hover/item:animate-bounce" />
                         Started recently
                       </div>
                     </div>

@@ -173,84 +173,107 @@ export default function NetworkStats() {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-start md:items-center justify-between flex-col md:flex-row gap-4">
-        <div>
-          <h2 className="text-2xl font-bold mb-2">Network Statistics</h2>
-          <p className="text-gray-400">
+    <div className="space-y-6 animate-fade-in">
+      {/* Enhanced Header */}
+      <div className="flex items-start md:items-center justify-between flex-col md:flex-row gap-4 animate-slide-in-down">
+        <div className="animate-expand-in">
+          <h2 className="text-2xl font-bold mb-2 glow-text">Network Statistics</h2>
+          <p className="text-gray-400 animate-slide-and-fade">
             Real-time metrics and performance data for the Mawari Network
           </p>
         </div>
-        <div className="flex items-center space-x-4">
-          <div className="flex items-center space-x-2">
-            <div
-              className={`w-2 h-2 rounded-full ${
-                isLive ? 'bg-green-500' : 'bg-red-500'
-              } animate-pulse`}
-            />
-            <span className="text-sm text-gray-400">{isLive ? 'Live' : 'Paused'}</span>
+        <div className="flex items-center space-x-4 animate-slide-in-right">
+          <div className="flex items-center space-x-2 bg-black/50 px-3 py-1 rounded-full cyber-border hover-lift smooth-transition">
+            <div className="relative">
+              <div
+                className={`w-2 h-2 rounded-full ${
+                  isLive ? 'bg-green-500 animate-pulse' : 'bg-red-500 animate-pulse'
+                }`}
+              />
+              {isLive && (
+                <div className="absolute inset-0 bg-green-500 rounded-full animate-ping" />
+              )}
+            </div>
+            <span className={`text-sm smooth-transition ${
+              isLive ? 'text-green-400' : 'text-red-400'
+            }`}>
+              {isLive ? 'Live' : 'Paused'}
+            </span>
           </div>
           <Button
             variant="outline"
             size="sm"
             onClick={() => setIsLive(!isLive)}
-            className="border-[#fb73ea]/30 text-gray-300 hover:border-[#fb73ea]"
+            className="border-[#fb73ea]/30 text-gray-300 hover:border-[#fb73ea] hover:bg-[#fb73ea]/10 hover-scale smooth-transition group"
           >
             {isLive ? 'Pause' : 'Resume'}
+            <Activity className="w-4 h-4 ml-2 group-hover:animate-pulse" />
           </Button>
         </div>
       </div>
 
-      {/* Timeframe Selector */}
-      <div className="flex items-center space-x-2">
-        {(['1h', '24h', '7d', '30d'] as const).map((timeframe) => (
+      {/* Enhanced Timeframe Selector */}
+      <div className="flex items-center space-x-2 animate-fade-in-up">
+        {(['1h', '24h', '7d', '30d'] as const).map((timeframe, index) => (
           <Button
             key={timeframe}
             variant={selectedTimeframe === timeframe ? 'default' : 'outline'}
             size="sm"
             onClick={() => setSelectedTimeframe(timeframe)}
-            className={
+            className={`smooth-transition hover-scale ${
               selectedTimeframe === timeframe
-                ? 'bg-[#fb73ea] text-black'
-                : 'border-[#fb73ea]/30 text-gray-300'
-            }
+                ? 'bg-[#fb73ea] text-black shadow-lg shadow-[#fb73ea]/30 animate-scale-in'
+                : 'border-[#fb73ea]/30 text-gray-300 hover:border-[#fb73ea] hover:bg-[#fb73ea]/10'
+            } animate-stagger-${index + 1}`}
           >
             {timeframe}
+            {selectedTimeframe === timeframe && (
+              <div className="ml-2 w-1 h-1 bg-black rounded-full animate-ping" />
+            )}
           </Button>
         ))}
       </div>
 
-      {/* Main Metrics Grid */}
+      {/* Enhanced Main Metrics Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {networkMetrics.map((metric, index) => {
           const Icon = metric.icon;
           return (
             <Card
               key={index}
-              className="cyber-border bg-black/50 backdrop-blur-sm border-[#fb73ea]/30 hover:scale-105 transition-all duration-300"
+              className={`cyber-border bg-black/50 backdrop-blur-sm border-[#fb73ea]/30 hover-lift hover-glow gpu-accelerated smooth-transition animate-stagger-${
+                (index % 6) + 1
+              } group relative overflow-hidden`}
             >
-              <CardContent className="p-6">
+              {/* Shimmer effect */}
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer pointer-events-none" />
+
+              <CardContent className="p-6 relative z-10">
                 <div className="flex items-center justify-between mb-4">
                   <div
                     className={`p-3 rounded-lg bg-black/50 ${metric.color.replace(
                       'text',
                       'bg',
-                    )}/20`}
+                    )}/20 group-hover:scale-110 smooth-transition group-hover:animate-pulse`}
                   >
-                    <Icon className={`w-6 h-6 ${metric.color}`} />
+                    <Icon className={`w-6 h-6 ${metric.color} group-hover:animate-bounce`} />
                   </div>
                   {metric.change && (
-                    <div className={`flex items-center text-sm ${getChangeColor(metric.change)}`}>
-                      <TrendingUp className="w-3 h-3 mr-1" />
+                    <div className={`flex items-center text-sm ${getChangeColor(metric.change)} hover-scale smooth-transition`}>
+                      <TrendingUp className="w-3 h-3 mr-1 group-hover:animate-bounce" />
                       {getChangeSymbol(metric.change)}
                       {metric.change}%
                     </div>
                   )}
                 </div>
                 <div>
-                  <p className="text-2xl font-bold mb-1">{metric.value}</p>
-                  <p className="text-sm text-gray-400">{metric.label}</p>
+                  <p className="text-2xl font-bold mb-1 group-hover:text-[#fb73ea] transition-colors duration-300 animate-scale-in">
+                    {metric.value}
+                  </p>
+                  <p className="text-sm text-gray-400 group-hover:text-gray-300 smooth-transition">
+                    {metric.label}
+                  </p>
+                  <div className="mt-2 h-1 bg-gradient-to-r from-[#fb73ea]/30 to-transparent rounded-full loading-skeleton" />
                 </div>
               </CardContent>
             </Card>
@@ -258,74 +281,110 @@ export default function NetworkStats() {
         })}
       </div>
 
-      {/* Realtime Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Bandwidth Chart */}
-        <Card className="cyber-border bg-black/50 backdrop-blur-sm border-[#fb73ea]/30">
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <Activity className="w-5 h-5 mr-2 text-[#fb73ea]" />
+      {/* Enhanced Realtime Charts */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-expand-in">
+        {/* Enhanced Bandwidth Chart */}
+        <Card className="cyber-border bg-black/50 backdrop-blur-sm border-[#fb73ea]/30 hover-lift smooth-transition group">
+          <CardHeader className="relative">
+            <div className="absolute top-0 right-0 w-2 h-2 bg-[#fb73ea] rounded-full animate-ping" />
+            <CardTitle className="flex items-center group-hover:text-[#fb73ea] transition-colors duration-300">
+              <div className="relative mr-2">
+                <Activity className="w-5 h-5 text-[#fb73ea] group-hover:animate-pulse" />
+                <div className="absolute inset-0 bg-[#fb73ea]/30 rounded-full blur-sm animate-pulse" />
+              </div>
               Bandwidth Usage (GB/s)
+              {isLive && (
+                <div className="ml-2 w-1 h-1 bg-green-400 rounded-full animate-ping" />
+              )}
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="h-64 flex items-end space-x-1">
+            <div className="h-64 flex items-end space-x-1 relative">
+              {/* Animated background grid */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-lg" />
               {realtimeData.slice(-20).map((data, index) => (
                 <div
                   key={index}
-                  className="flex-1 bg-gradient-to-t from-[#fb73ea] to-purple-600 rounded-t"
-                  style={{ height: `${(data.bandwidth / 150) * 100}%` }}
+                  className="flex-1 bg-gradient-to-t from-[#fb73ea] to-purple-600 rounded-t hover-scale smooth-transition relative group/bar"
+                  style={{
+                    height: `${(data.bandwidth / 150) * 100}%`,
+                    animation: `slideAndFade 0.5s ease-out ${index * 0.05}s both`
+                  }}
                   title={`${data.bandwidth.toFixed(1)} GB/s at ${formatTime(data.timestamp)}`}
-                />
+                >
+                  <div className="absolute inset-0 bg-gradient-to-t from-purple-600/50 to-pink-600/50 rounded-t opacity-0 group/bar:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-black/80 text-xs px-1 py-0.5 rounded opacity-0 group/bar:opacity-100 transition-opacity duration-300">
+                    {data.bandwidth.toFixed(1)} GB/s
+                  </div>
+                </div>
               ))}
             </div>
-            <div className="flex items-center justify-between mt-2 text-xs text-gray-400">
-              <span>{formatTime(realtimeData[0]?.timestamp || Date.now())}</span>
-              <span>
-                Current:{' '}
-                {realtimeData.length > 0
-                  ? realtimeData[realtimeData.length - 1].bandwidth.toFixed(1)
-                  : '0'}{' '}
-                GB/s
-              </span>
-              <span>
-                {formatTime(realtimeData[realtimeData.length - 1]?.timestamp || Date.now())}
-              </span>
+            <div className="flex items-center justify-between mt-4 text-xs text-gray-400">
+              <span className="animate-fade-in">{formatTime(realtimeData[0]?.timestamp || Date.now())}</span>
+              <div className="flex items-center space-x-2">
+                <div className="w-1 h-1 bg-green-400 rounded-full animate-pulse" />
+                <span className="text-green-400 font-medium">
+                  Current:{' '}
+                  {realtimeData.length > 0
+                    ? realtimeData[realtimeData.length - 1].bandwidth.toFixed(1)
+                    : '0'}{' '}
+                  GB/s
+                </span>
+              </div>
+              <span className="animate-fade-in">{formatTime(realtimeData[realtimeData.length - 1]?.timestamp || Date.now())}</span>
             </div>
           </CardContent>
         </Card>
 
-        {/* Latency Chart */}
-        <Card className="cyber-border bg-black/50 backdrop-blur-sm border-[#fb73ea]/30">
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <Clock className="w-5 h-5 mr-2 text-[#fb73ea]" />
+        {/* Enhanced Latency Chart */}
+        <Card className="cyber-border bg-black/50 backdrop-blur-sm border-[#fb73ea]/30 hover-lift smooth-transition group">
+          <CardHeader className="relative">
+            <div className="absolute top-0 right-0 w-2 h-2 bg-green-400 rounded-full animate-ping" />
+            <CardTitle className="flex items-center group-hover:text-green-400 transition-colors duration-300">
+              <div className="relative mr-2">
+                <Clock className="w-5 h-5 text-[#fb73ea] group-hover:animate-pulse" />
+                <div className="absolute inset-0 bg-green-400/30 rounded-full blur-sm animate-pulse" />
+              </div>
               Network Latency (ms)
+              {isLive && (
+                <div className="ml-2 w-1 h-1 bg-green-400 rounded-full animate-ping" />
+              )}
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="h-64 flex items-end space-x-1">
+            <div className="h-64 flex items-end space-x-1 relative">
+              {/* Animated background grid */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-lg" />
               {realtimeData.slice(-20).map((data, index) => (
                 <div
                   key={index}
-                  className="flex-1 bg-gradient-to-t from-green-400 to-blue-600 rounded-t"
-                  style={{ height: `${(data.latency / 10) * 100}%` }}
+                  className="flex-1 bg-gradient-to-t from-green-400 to-blue-600 rounded-t hover-scale smooth-transition relative group/bar"
+                  style={{
+                    height: `${(data.latency / 10) * 100}%`,
+                    animation: `slideAndFade 0.5s ease-out ${index * 0.05}s both`
+                  }}
                   title={`${data.latency.toFixed(1)}ms at ${formatTime(data.timestamp)}`}
-                />
+                >
+                  <div className="absolute inset-0 bg-gradient-to-t from-blue-600/50 to-cyan-600/50 rounded-t opacity-0 group/bar:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-black/80 text-xs px-1 py-0.5 rounded opacity-0 group/bar:opacity-100 transition-opacity duration-300">
+                    {data.latency.toFixed(1)}ms
+                  </div>
+                </div>
               ))}
             </div>
-            <div className="flex items-center justify-between mt-2 text-xs text-gray-400">
-              <span>{formatTime(realtimeData[0]?.timestamp || Date.now())}</span>
-              <span>
-                Current:{' '}
-                {realtimeData.length > 0
-                  ? realtimeData[realtimeData.length - 1].latency.toFixed(1)
-                  : '0'}
-                ms
-              </span>
-              <span>
-                {formatTime(realtimeData[realtimeData.length - 1]?.timestamp || Date.now())}
-              </span>
+            <div className="flex items-center justify-between mt-4 text-xs text-gray-400">
+              <span className="animate-fade-in">{formatTime(realtimeData[0]?.timestamp || Date.now())}</span>
+              <div className="flex items-center space-x-2">
+                <div className="w-1 h-1 bg-green-400 rounded-full animate-pulse" />
+                <span className="text-green-400 font-medium">
+                  Current:{' '}
+                  {realtimeData.length > 0
+                    ? realtimeData[realtimeData.length - 1].latency.toFixed(1)
+                    : '0'}
+                  ms
+                </span>
+              </div>
+              <span className="animate-fade-in">{formatTime(realtimeData[realtimeData.length - 1]?.timestamp || Date.now())}</span>
             </div>
           </CardContent>
         </Card>
