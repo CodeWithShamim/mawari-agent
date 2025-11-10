@@ -119,9 +119,10 @@ interface ChatGPTTypingProps {
   message: string;
   isComplete?: boolean;
   onComplete?: () => void;
+  onAutoScroll?: () => void;
 }
 
-export function ChatGPTTyping({ message, isComplete = false, onComplete }: ChatGPTTypingProps) {
+export function ChatGPTTyping({ message, isComplete = false, onComplete, onAutoScroll }: ChatGPTTypingProps) {
   const [displayedMessage, setDisplayedMessage] = useState('');
   const [isTyping, setIsTyping] = useState(true);
   const [showCursor, setShowCursor] = useState(true);
@@ -161,17 +162,17 @@ export function ChatGPTTyping({ message, isComplete = false, onComplete }: ChatG
       const charIndex = charIndexRef.current;
 
       // Simulate natural typing patterns
-      if (charIndex === 0) return 300; // Start delay
-      if (random < 0.05) return 200; // Occasional longer pause
-      if (random < 0.15) return 80; // Short pause
-      if (random < 0.3) return 40; // Slightly slower
-      if (chars[charIndex] === ' ' || chars[charIndex] === '\n') return 60; // Pause for spaces/newlines
+      if (charIndex === 0) return 30; // Start delay
+      if (random < 0.05) return 20; // Occasional longer pause
+      if (random < 0.15) return 8; // Short pause
+      if (random < 0.3) return 4; // Slightly slower
+      if (chars[charIndex] === ' ' || chars[charIndex] === '\n') return 6; // Pause for spaces/newlines
 
       // Typing burst effect
       if (burstCountRef.current < 3 && random < 0.7) {
         burstCountRef.current++;
         setTypingBurst(true);
-        setTimeout(() => setTypingBurst(false), 100);
+        setTimeout(() => setTypingBurst(false), 10);
         return 15; // Fast typing during burst
       } else {
         burstCountRef.current = 0;
@@ -189,12 +190,20 @@ export function ChatGPTTyping({ message, isComplete = false, onComplete }: ChatG
         setDisplayedMessage((prev) => prev + nextChar);
         charIndexRef.current++;
 
+        // Auto-scroll after adding character
+        if (charIndex % 20 === 0) { // Scroll every 20 characters
+          setTimeout(() => onAutoScroll?.(), 10);
+        }
+
         // Schedule next character
         const nextDelay = getTypeSpeed();
         setTimeout(typeNextChar, nextDelay);
       } else {
         // Typing complete
         setIsTyping(false);
+
+        // Final scroll to bottom
+        setTimeout(() => onAutoScroll?.(), 10);
 
         // Show cursor for a moment, then hide it
         setTimeout(() => {
@@ -214,7 +223,7 @@ export function ChatGPTTyping({ message, isComplete = false, onComplete }: ChatG
         timeoutRef.current = null;
       }
     };
-  }, [message, isComplete, onComplete]);
+  }, [message, isComplete, onComplete, onAutoScroll]);
 
   return (
     <div className="relative">

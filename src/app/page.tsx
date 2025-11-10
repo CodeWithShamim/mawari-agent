@@ -272,7 +272,7 @@ function InteractiveContent() {
       </main>
 
       {/* Enhanced Footer */}
-      <footer className="relative z-10 border-t border-[#fb73ea]/20 backdrop-blur-sm bg-black/50 mt-16 animate-slide-in-up">
+      <footer className="relative z-10 border-t border-[#fb73ea]/20 backdrop-blur-sm bg-black/50 mt-2 animate-slide-in-up">
         <div className="container mx-auto px-4 py-6">
           <div className="flex flex-col md:flex-row items-center justify-between">
             <div className="flex items-center space-x-2 mb-4 md:mb-0 animate-fade-in-left">

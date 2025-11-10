@@ -29,9 +29,16 @@ export default function AIChatbox({ isAIConnected }: AIChatboxProps) {
     {
       id: 'welcome-msg',
       role: 'assistant',
-      content: `Hello! I'm your Mawari Network AI assistant, powered by Sentient dobby model with the advanced Dobby model. I'm here to help you understand everything about Mawari's decentralized infrastructure for immersive experiences, XR streaming, AI-powered content delivery, and the future of the 3D internet.
+      content: `🚀 Welcome! I'm MAWARAI, your official Mawari Network AI assistant, powered by the advanced Dobby Unhinged Llama 3.3 70B model. I'm here to provide you with comprehensive insights into Mawari's revolutionary technology that's transforming the immersive internet!
 
-What would you like to know about Mawari Network?`,
+I can help you explore:
+• 🌐 **DePIN Architecture** - Global distributed infrastructure with 50+ nodes
+• ⚡ **Performance Metrics** - 80% bandwidth reduction, sub-10ms latency
+• 🎮 **XR & Gaming** - Real-time streaming for AR/VR/MR experiences
+• 🏥 **Enterprise Solutions** - Digital twins, telemedicine, training simulations
+• 🔧 **Developer Tools** - SDKs, APIs, and creator ecosystem
+
+What aspect of Mawari's groundbreaking technology would you like to dive into?`,
       timestamp: new Date(),
     },
   ]);
@@ -51,7 +58,7 @@ What would you like to know about Mawari Network?`,
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, isLoading, typingIndicator]);
 
   const handleSendMessage = async () => {
     if (!inputValue.trim() || isLoading) return;
@@ -160,11 +167,15 @@ What would you like to know about Mawari Network?`,
     }
   };
 
+  const onAutoScroll = () => {
+    scrollToBottom();
+  };
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
       {/* Chat Area */}
       <div className="lg:col-span-3">
-        <Card className=" cyber-border bg-black/50 backdrop-blur-sm border-[#fb73ea]/30 h-[620px] flex flex-col">
+        <Card className=" cyber-border bg-black/50 backdrop-blur-sm border-[#fb73ea]/30 h-[45rem] flex flex-col">
           <CardHeader className="border-b border-[#fb73ea]/20 ">
             <div className="flex items-center justify-between">
               <CardTitle className="text-xl font-bold flex items-center">
@@ -189,7 +200,7 @@ What would you like to know about Mawari Network?`,
                     isAIConnected ? 'text-green-400' : 'text-yellow-400'
                   }`}
                 >
-                  Dobby model ⚡
+                  {isAIConnected ? 'Dobby model ⚡' : 'Failed to connect dobby.'}
                 </span>
               </div>
             </div>
@@ -234,6 +245,7 @@ What would you like to know about Mawari Network?`,
                         key={`typing-${message.id}`}
                         message={message.content || ''}
                         onComplete={() => onTypingComplete(message.id!)}
+                        onAutoScroll={onAutoScroll}
                       />
                     ) : (
                       <p className="text-sm leading-relaxed whitespace-pre-wrap">
@@ -280,7 +292,7 @@ What would you like to know about Mawari Network?`,
                   onKeyPress={handleKeyPress}
                   placeholder="Ask about Mawari Network..."
                   className="flex-1 px-4 py-2 bg-black/50 border border-[#fb73ea]/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#fb73ea] focus:border-opacity-50 transition-all duration-300"
-                  disabled={isLoading}
+                  disabled={isLoading || typingIndicator}
                 />
                 <Button
                   onClick={handleSendMessage}
@@ -303,7 +315,10 @@ What would you like to know about Mawari Network?`,
                   {suggestedQuestions.map((question, index) => (
                     <button
                       key={index}
-                      onClick={() => handleSuggestedQuestion(question)}
+                      onClick={() => {
+                        if (typingIndicator) return;
+                        handleSuggestedQuestion(question);
+                      }}
                       className="px-3 py-1 bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs rounded-full border border-gray-600 hover-lift smooth-transition"
                     >
                       {question}
@@ -318,7 +333,7 @@ What would you like to know about Mawari Network?`,
 
       {/* Sidebar */}
       <div className="lg:col-span-1">
-        <Card className="cyber-border bg-black/50 backdrop-blur-sm border-[#fb73ea]/30  h-[620px]">
+        <Card className="cyber-border bg-black/50 backdrop-blur-sm border-[#fb73ea]/30  h-[45rem]">
           <CardHeader>
             <CardTitle className="text-lg font-bold flex items-center">
               <Sparkles className="w-5 h-5 mr-2 text-[#fb73ea]" />
