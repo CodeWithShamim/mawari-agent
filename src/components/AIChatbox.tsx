@@ -53,7 +53,9 @@ What aspect of Mawari's groundbreaking technology would you like to dive into?`,
   const inputRef = useRef<HTMLInputElement>(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
+    }
   };
 
   useEffect(() => {
@@ -175,7 +177,7 @@ What aspect of Mawari's groundbreaking technology would you like to dive into?`,
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
       {/* Chat Area */}
       <div className="lg:col-span-3">
-        <Card className=" cyber-border bg-black/50 backdrop-blur-sm border-[#fb73ea]/30 h-[45rem] flex flex-col">
+        <Card className=" cyber-border bg-black/50 backdrop-blur-sm border-[#fb73ea]/30 h-[50rem] flex flex-col">
           <CardHeader className="border-b border-[#fb73ea]/20 ">
             <div className="flex items-center justify-between">
               <CardTitle className="text-xl font-bold flex items-center">
@@ -206,9 +208,9 @@ What aspect of Mawari's groundbreaking technology would you like to dive into?`,
             </div>
           </CardHeader>
 
-          <CardContent className="flex-1 flex flex-col p-0 overflow-auto">
+          <CardContent className="flex-1 flex flex-col p-0 overflow-hidden">
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-4">
+            <div className="flex-1 overflow-y-auto p-6 space-y-4" ref={messagesEndRef}>
               {sendingAnimation && (
                 <div className="fixed inset-0 pointer-events-none z-50">
                   <ParticleAnimation key={`particle-${messageKey}`} />
@@ -278,7 +280,7 @@ What aspect of Mawari's groundbreaking technology would you like to dive into?`,
                 </div>
               )}
 
-              <div ref={messagesEndRef} />
+              {/* Bottom scroll target */}
             </div>
 
             {/* Input Area */}
@@ -333,7 +335,7 @@ What aspect of Mawari's groundbreaking technology would you like to dive into?`,
 
       {/* Sidebar */}
       <div className="lg:col-span-1">
-        <Card className="cyber-border bg-black/50 backdrop-blur-sm border-[#fb73ea]/30  h-[45rem]">
+        <Card className="cyber-border bg-black/50 backdrop-blur-sm border-[#fb73ea]/30  h-[50rem]">
           <CardHeader>
             <CardTitle className="text-lg font-bold flex items-center">
               <Sparkles className="w-5 h-5 mr-2 text-[#fb73ea]" />
