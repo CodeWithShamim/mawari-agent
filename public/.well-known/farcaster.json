@@ -4,6 +4,10 @@
     "payload": "eyJkb21haW4iOiJtYXdhcmktYWdlbnQudmVyY2VsLmFwcCJ9",
     "signature": "87DqCeSjj+zrfJcvNGxH+aKpItODSDOR8zQTWcYzxUdsHsQUu6WI/l7vRa6TtDXdGIfveUajCZtzG+Yrxdxq+Bw="
   },
+
+  "baseBuilder": {
+    "ownerAddress": "0x72cab7c25A1Ef52f11ABBb498F18E4086a6aE748"
+  },
   "manifest": {
     "name": "Mawari Agent",
     "description": "Your Gateway to the Immersive Internet - Experience real-time, AI-driven immersive content powered by the Mawari Network.",
