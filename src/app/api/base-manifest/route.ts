@@ -8,6 +8,7 @@ export async function GET() {
     name: "Mawari Agent",
     description: "Your Gateway to the Immersive Internet - Experience real-time, AI-driven immersive content powered by the Mawari Network.",
     iconUrl: `${URL}/blue-icon.png`,
+    imageUrl: `${URL}/blue-hero.jpg`,
     splashScreenUrl: `${URL}/blue-hero.jpg`,
     homeUrl: `${URL}/`,
     webhookUrl: `${URL}/api/webhook`,
