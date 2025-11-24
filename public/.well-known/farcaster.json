@@ -1,5 +1,4 @@
 {
- 
   "accountAssociation": {
     "header": "eyJmaWQiOjY0NTMxMiwidHlwZSI6ImN1c3RvZHkiLCJrZXkiOiIweDBhYTMyMDQ3RTM3MzBBQkNjM2RDZjlGQTcxQzA2RDQ3MEVjOGY1MjYifQ",
     "payload": "eyJkb21haW4iOiJtYXdhcmktYWdlbnQudmVyY2VsLmFwcCJ9",
@@ -47,8 +46,9 @@
     "screenshotUrls": [
       "https://mawari-agent.vercel.app/screenshot-portrait.png"
     ],
+    "imageUrl": "https://mawari-agent.vercel.app/blue-hero.jpg",
     "iconUrl": "https://mawari-agent.vercel.app/blue-icon.png",
-    "splashImageUrl": "https://mawari-agent.vercel.app/blue-hero.jpg",
+    "splashImageUrl": "https://mawari-agent.vercel.app/blue-icon.png",
     "splashBackgroundColor": "#000000",
     "homeUrl": "https://mawari-agent.vercel.app",
     "webhookUrl": "https://mawari-agent.vercel.app/api/webhook",
@@ -58,6 +58,7 @@
     "tagline": "Immersive AI experiences",
     "ogTitle": "Mawari Agent AI Immersive",
     "ogDescription": "Experience the future of immersive computing with real-time AI-driven XR",
-    "ogImageUrl": "https://mawari-agent.vercel.app/blue-hero.jpg"
+    "ogImageUrl": "https://mawari-agent.vercel.app/screenshot-portrait.png",
+    "buttonTitle": "Open Mawari Agent"
   }
 }
