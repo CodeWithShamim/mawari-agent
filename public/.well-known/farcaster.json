@@ -53,18 +53,9 @@
     "homeUrl": "https://mawari-agent.vercel.app",
     "webhookUrl": "https://mawari-agent.vercel.app/api/webhook",
     "primaryCategory": "social",
-    "tags": [
-      "immersive-compute",
-      "real-time-streaming",
-      "AI",
-      "Mawari",
-      "XR",
-      "metaverse",
-      "AR",
-      "VR"
-    ],
+    "tags": ["immersive-compute", "real-time-streaming", "AI", "Mawari"],
     "heroImageUrl": "https://mawari-agent.vercel.app/blue-hero.jpg",
-    "tagline": "Immersive AI experiences instantly",
+    "tagline": "Immersive AI experiences",
     "ogTitle": "Mawari Agent AI Immersive",
     "ogDescription": "Experience the future of immersive computing with real-time AI-driven XR",
     "ogImageUrl": "https://mawari-agent.vercel.app/blue-hero.jpg"
