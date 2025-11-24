@@ -64,7 +64,7 @@ function InteractiveContent() {
             </div>
             <div className="absolute inset-0 rounded-full border-2 border-[#fb73ea] opacity-30 animate-ping" />
           </div>
-          <p className="mt-4 text-gray-400">Initializing Mawari AI Agent...</p>
+          <p className="mt-4 text-gray-400">Initializing Mawari AI Agent V1...</p>
         </div>
       </div>
     );

@@ -2,8 +2,8 @@ const ROOT_URL = process.env.NEXT_PUBLIC_ROOT_URL;
 
 export const minikitConfig = {
   accountAssociation: {
-    header: "",
-    payload: "",
+    header: "minikit-manifest",
+    payload: "eyJhY2NvdW50QXNzb2NpYXRpb24iOnsic2lnbmF0dXJlIjoiIiwicGF5bG9hZCI6IiJ9fQ",
     signature: "",
   },
   miniapp: {
@@ -11,7 +11,7 @@ export const minikitConfig = {
     name: "Mawari Agent",
     subtitle: "Your Gateway to the Immersive Internet",
     description:
-      "Experience real-time, AI-driven immersive content powered by the Mawari Network.",
+      "Experience real-time, AI-driven immersive content powered by the Mawari Network. Step into the future of immersive computing with real-time AI-powered XR streaming.",
     screenshotUrls: [`${ROOT_URL}/screenshot-portrait.png`],
     iconUrl: `${ROOT_URL}/blue-icon.png`,
     splashImageUrl: `${ROOT_URL}/blue-hero.jpg`,
@@ -25,12 +25,18 @@ export const minikitConfig = {
       "AI",
       "Mawari",
       "next-gen-experiences",
+      "XR",
+      "metaverse",
+      "AR",
+      "VR"
     ],
     heroImageUrl: `${ROOT_URL}/blue-hero.jpg`,
     tagline: "Immersive AI experiences streamed instantly",
-    ogTitle: "Mawari Agent",
+    ogTitle: "Mawari Agent - AI-Powered Immersive Internet",
     ogDescription:
-      "Step into the future of immersive computing with real-time AI-driven experiences powered by Mawari.",
+      "Experience the future of immersive computing with real-time AI-driven XR streaming powered by Mawari Network.",
     ogImageUrl: `${ROOT_URL}/blue-hero.jpg`,
   },
+  manifestUrl: `${ROOT_URL}/manifest.json`,
+  farcasterUrl: `${ROOT_URL}/api/farcaster`,
 } as const;

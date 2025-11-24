@@ -1,0 +1,40 @@
+{
+  "name": "Mawari Agent",
+  "short_name": "Mawari",
+  "description": "Your Gateway to the Immersive Internet - Experience real-time, AI-driven immersive content powered by the Mawari Network.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#fb73ea",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/blue-icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/blue-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot-portrait.png",
+      "sizes": "1170x2532",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ],
+  "categories": ["social", "entertainment", "productivity"],
+  "tags": ["immersive-compute", "real-time-streaming", "AI", "Mawari", "next-gen-experiences"],
+  "lang": "en",
+  "dir": "ltr",
+  "scope": "/",
+  "launch_handler": {
+    "client_mode": "focus-existing"
+  }
+}

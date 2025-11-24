@@ -1,0 +1,15 @@
+{
+  "accountAssociation": {
+    "header": "minikit-manifest",
+    "payload": "eyJhY2NvdW50QXNzb2NpYXRpb24iOnsic2lnbmF0dXJlIjoiIiwicGF5bG9hZCI6IiJ9fQ",
+    "signature": ""
+  },
+  "manifest": {
+    "name": "Mawari Agent",
+    "description": "Your Gateway to the Immersive Internet - Experience real-time, AI-driven immersive content powered by the Mawari Network.",
+    "icon": "https://mawari-agent.vercel.app/blue-icon.png",
+    "home_url": "https://mawari-agent.vercel.app",
+    "categories": ["social", "entertainment", "productivity"],
+    "tags": ["immersive-compute", "real-time-streaming", "AI", "Mawari", "next-gen-experiences", "XR", "metaverse"]
+  }
+}
