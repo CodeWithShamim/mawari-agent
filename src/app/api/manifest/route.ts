@@ -9,6 +9,9 @@ export async function GET(request: NextRequest) {
       name: "Mawari Agent",
       description: "Your Gateway to the Immersive Internet - Experience real-time, AI-driven immersive content powered by the Mawari Network.",
       iconUrl: `${rootUrl}/blue-icon.png`,
+      imageUrl: `${rootUrl}/blue-hero.jpg`,
+      heroImageUrl: `${rootUrl}/blue-hero.jpg`,
+      splashImageUrl: `${rootUrl}/blue-hero.jpg`,
       splashScreenUrl: `${rootUrl}/blue-hero.jpg`,
       homeUrl: `${rootUrl}/`,
       categories: ["social", "entertainment", "productivity"],
@@ -33,7 +36,11 @@ export async function GET(request: NextRequest) {
       backgroundColor: "#000000",
       themeColor: "#fb73ea",
       platform: "base",
-      type: "miniapp"
+      type: "miniapp",
+      // OpenGraph fields for embed preview
+      ogTitle: "Mawari Agent - AI-Powered Immersive Internet",
+      ogDescription: "Experience the future of immersive computing with real-time AI-driven XR streaming powered by Mawari Network.",
+      ogImageUrl: `${rootUrl}/blue-hero.jpg`,
     };
 
     return NextResponse.json(baseManifest, {
@@ -43,6 +50,9 @@ export async function GET(request: NextRequest) {
         'Access-Control-Allow-Methods': 'GET, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization',
         'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'X-Content-Type-Options': 'nosniff',
+        'X-Frame-Options': 'SAMEORIGIN',
+        'Referrer-Policy': 'strict-origin-when-cross-origin',
       },
     });
   } catch (error) {
