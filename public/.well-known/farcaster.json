@@ -8,6 +8,7 @@
     "name": "Mawari Agent",
     "description": "Your Gateway to the Immersive Internet - Experience real-time, AI-driven immersive content powered by the Mawari Network.",
     "icon": "https://mawari-agent.vercel.app/blue-icon.png",
+    "imageUrl": "https://mawari-agent.vercel.app/blue-hero.jpg",
     "homeUrl": "https://mawari-agent.vercel.app/",
     "webhookUrl": "https://mawari-agent.vercel.app/api/webhook",
     "categories": [
