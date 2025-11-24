@@ -2,9 +2,11 @@ const ROOT_URL = process.env.NEXT_PUBLIC_ROOT_URL;
 
 export const minikitConfig = {
   accountAssociation: {
-    header: "minikit-manifest",
-    payload: "eyJhY2NvdW50QXNzb2NpYXRpb24iOnsic2lnbmF0dXJlIjoiIiwicGF5bG9hZCI6IiJ9fQ",
-    signature: "",
+    header:
+      "eyJmaWQiOjY0NTMxMiwidHlwZSI6ImN1c3RvZHkiLCJrZXkiOiIweDBhYTMyMDQ3RTM3MzBBQkNjM2RDZjlGQTcxQzA2RDQ3MEVjOGY1MjYifQ",
+    payload: "eyJkb21haW4iOiJtYXdhcmktYWdlbnQudmVyY2VsLmFwcCJ9",
+    signature:
+      "87DqCeSjj+zrfJcvNGxH+aKpItODSDOR8zQTWcYzxUdsHsQUu6WI/l7vRa6TtDXdGIfveUajCZtzG+Yrxdxq+Bw=",
   },
   miniapp: {
     version: "1",
@@ -28,7 +30,7 @@ export const minikitConfig = {
       "XR",
       "metaverse",
       "AR",
-      "VR"
+      "VR",
     ],
     heroImageUrl: `${ROOT_URL}/blue-hero.jpg`,
     tagline: "Immersive AI experiences streamed instantly",

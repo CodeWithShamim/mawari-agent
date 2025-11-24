@@ -1,10 +1,10 @@
 {
+ 
   "accountAssociation": {
-    "header": "minikit-manifest",
-    "payload": "eyJmaWQiOjAsImRvbWFpbiI6Im1hd2FyaS1hZ2VudC52ZXJjZWwuYXBwIiwidGltZXN0YW1wIjoxNzYzOTY4ODQyfQ==",
-    "signature": ""
+    "header": "eyJmaWQiOjY0NTMxMiwidHlwZSI6ImN1c3RvZHkiLCJrZXkiOiIweDBhYTMyMDQ3RTM3MzBBQkNjM2RDZjlGQTcxQzA2RDQ3MEVjOGY1MjYifQ",
+    "payload": "eyJkb21haW4iOiJtYXdhcmktYWdlbnQudmVyY2VsLmFwcCJ9",
+    "signature": "87DqCeSjj+zrfJcvNGxH+aKpItODSDOR8zQTWcYzxUdsHsQUu6WI/l7vRa6TtDXdGIfveUajCZtzG+Yrxdxq+Bw="
   },
-
   "manifest": {
     "name": "Mawari Agent",
     "description": "Your Gateway to the Immersive Internet - Experience real-time, AI-driven immersive content powered by the Mawari Network.",
