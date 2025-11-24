@@ -12,7 +12,7 @@
     "name": "Mawari Agent",
     "description": "Your Gateway to the Immersive Internet - Experience real-time, AI-driven immersive content powered by the Mawari Network.",
     "icon": "https://mawari-agent.vercel.app/blue-icon.png",
-    "imageUrl": "https://mawari-agent.vercel.app/blue-hero.jpg",
+    "imageUrl": "https://mawari-agent.vercel.app/screenshot-portrait.png",
     "homeUrl": "https://mawari-agent.vercel.app/",
     "webhookUrl": "https://mawari-agent.vercel.app/api/webhook",
     "categories": ["social", "entertainment", "productivity"],
@@ -50,7 +50,7 @@
     "screenshotUrls": [
       "https://mawari-agent.vercel.app/screenshot-portrait.png"
     ],
-    "imageUrl": "https://mawari-agent.vercel.app/blue-hero.jpg",
+    "imageUrl": "https://mawari-agent.vercel.app/screenshot-portrait.png",
     "iconUrl": "https://mawari-agent.vercel.app/blue-icon.png",
     "splashImageUrl": "https://mawari-agent.vercel.app/blue-icon.png",
     "splashBackgroundColor": "#000000",
@@ -64,5 +64,6 @@
     "ogDescription": "Experience the future of immersive computing with real-time AI-driven XR",
     "ogImageUrl": "https://mawari-agent.vercel.app/screenshot-portrait.png",
     "buttonTitle": "Open Mawari Agent"
-  }
+  },
+  "imageUrl": "https://mawari-agent.vercel.app/screenshot-portrait.png"
 }
