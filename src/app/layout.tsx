@@ -12,6 +12,9 @@ export const metadata: Metadata = {
   icons: {
     icon: '/favicon.ico',
   },
+  other: {
+    'fc:miniapp': 'true',
+  },
 }
 
 export default function RootLayout({
@@ -21,6 +24,23 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark">
+      <head>
+        {/* Base MiniApp SDK will be loaded here when available */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              // Initialize Base MiniApp when available
+              if (typeof window !== 'undefined' && window.minikit) {
+                window.minikit.ready().then(() => {
+                  console.log('✅ Base MiniApp initialized');
+                }).catch(err => {
+                  console.error('❌ Base MiniApp initialization failed:', err);
+                });
+              }
+            `,
+          }}
+        />
+      </head>
       <body className={inter.className}>
         <div className="min-h-screen bg-black text-white">
           {children}

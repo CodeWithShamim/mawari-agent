@@ -1,15 +1,77 @@
 {
   "accountAssociation": {
     "header": "minikit-manifest",
-    "payload": "eyJhY2NvdW50QXNzb2NpYXRpb24iOnsic2lnbmF0dXJlIjoiIiwicGF5bG9hZCI6IiJ9fQ",
+    "payload": "eyJmaWQiOjAsImRvbWFpbiI6Im1hd2FyaS1hZ2VudC52ZXJjZWwuYXBwIiwidGltZXN0YW1wIjoxNzYzOTY4ODQyfQ==",
     "signature": ""
   },
   "manifest": {
     "name": "Mawari Agent",
     "description": "Your Gateway to the Immersive Internet - Experience real-time, AI-driven immersive content powered by the Mawari Network.",
     "icon": "https://mawari-agent.vercel.app/blue-icon.png",
-    "home_url": "https://mawari-agent.vercel.app",
-    "categories": ["social", "entertainment", "productivity"],
-    "tags": ["immersive-compute", "real-time-streaming", "AI", "Mawari", "next-gen-experiences", "XR", "metaverse"]
+    "homeUrl": "https://mawari-agent.vercel.app/",
+    "webhookUrl": "https://mawari-agent.vercel.app/api/webhook",
+    "categories": [
+      "social",
+      "entertainment",
+      "productivity"
+    ],
+    "tags": [
+      "immersive-compute",
+      "real-time-streaming",
+      "AI",
+      "Mawari",
+      "next-gen-experiences",
+      "XR",
+      "metaverse",
+      "AR",
+      "VR"
+    ],
+    "version": "1.0.0",
+    "developer": {
+      "name": "Mawari Network",
+      "url": "https://mawari.net"
+    },
+    "support": {
+      "email": "support@mawari.net",
+      "url": "https://discord.gg/mawari"
+    },
+    "screenshots": [
+      "https://mawari-agent.vercel.app/screenshot-portrait.png"
+    ],
+    "backgroundColor": "#000000",
+    "themeColor": "#fb73ea",
+    "platform": "base",
+    "type": "miniapp"
+  },
+  "miniapp": {
+    "version": "1",
+    "name": "Mawari Agent",
+    "subtitle": "Your Gateway to the Immersive Internet",
+    "description": "Experience real-time, AI-driven immersive content powered by the Mawari Network. Step into the future of immersive computing with real-time AI-powered XR streaming.",
+    "screenshotUrls": [
+      "https://mawari-agent.vercel.app/screenshot-portrait.png"
+    ],
+    "iconUrl": "https://mawari-agent.vercel.app/blue-icon.png",
+    "splashImageUrl": "https://mawari-agent.vercel.app/blue-hero.jpg",
+    "splashBackgroundColor": "#000000",
+    "homeUrl": "https://mawari-agent.vercel.app",
+    "webhookUrl": "https://mawari-agent.vercel.app/api/webhook",
+    "primaryCategory": "social",
+    "tags": [
+      "immersive-compute",
+      "real-time-streaming",
+      "AI",
+      "Mawari",
+      "next-gen-experiences",
+      "XR",
+      "metaverse",
+      "AR",
+      "VR"
+    ],
+    "heroImageUrl": "https://mawari-agent.vercel.app/blue-hero.jpg",
+    "tagline": "Immersive AI experiences streamed instantly",
+    "ogTitle": "Mawari Agent - AI-Powered Immersive Internet",
+    "ogDescription": "Experience the future of immersive computing with real-time AI-driven XR streaming powered by Mawari Network.",
+    "ogImageUrl": "https://mawari-agent.vercel.app/blue-hero.jpg"
   }
 }

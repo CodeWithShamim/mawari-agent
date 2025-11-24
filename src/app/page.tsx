@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { sdk } from '@farcaster/miniapp-sdk';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -27,6 +28,9 @@ function InteractiveContent() {
   const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
+    // Initialize Base Miniapp SDK
+    sdk.actions.ready();
+
     // Check Fireworks AI service availability only on client
     const checkAIConnection = async () => {
       try {

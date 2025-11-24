@@ -18,7 +18,7 @@ export class BaseMiniappSDK {
     try {
       // Initialize Base Miniapp SDK
       if (typeof window !== 'undefined' && (window as any).minikit) {
-        await (window as any).minikit.initialize();
+        await (window as any).minikit.ready();
         this.isInitialized = true;
         console.log('✅ Base Miniapp SDK initialized');
       }
