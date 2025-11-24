@@ -12,6 +12,30 @@ export const metadata: Metadata = {
   icons: {
     icon: '/favicon.ico',
   },
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: process.env.NEXT_PUBLIC_ROOT_URL,
+    title: 'Mawari AI Agent - Your Gateway to the Immersive Internet',
+    description: 'AI-powered assistant for Mawari Network - Real-time streaming of immersive, AI-powered experiences globally with near-zero latency.',
+    siteName: 'Mawari AI Agent',
+    images: [
+      {
+        url: `${process.env.NEXT_PUBLIC_ROOT_URL}/blue-hero.jpg`,
+        width: 1024,
+        height: 681,
+        alt: 'Mawari AI Agent - Immersive Internet Gateway',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Mawari AI Agent - Your Gateway to the Immersive Internet',
+    description: 'AI-powered assistant for Mawari Network - Real-time streaming of immersive, AI-powered experiences globally with near-zero latency.',
+    images: [`${process.env.NEXT_PUBLIC_ROOT_URL}/blue-hero.jpg`],
+    creator: '@MawariNetwork',
+    site: '@MawariNetwork',
+  },
   other: {
     'fc:miniapp': 'true',
   },
